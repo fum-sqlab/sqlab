@@ -19,4 +19,15 @@ class Form(models.Model):
 
 
 class Field(models.Model):
-    pass
+    id = models.BigAutoField(unique=True)
+    name = models.CharField(max_length=50)
+    label = models.CharField(max_length=50)
+    description = models.TextField(max_length=200, null=True, blank=True)
+    help_text = models.TextField(max_length=200)
+    type = models.CharField(default=None, max_length=50)
+    min_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    max_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    default_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    required = models.BooleanField(default=False)
+    enable = models.BooleanField(default=True)
+    visible = models.BooleanField(default=True)
