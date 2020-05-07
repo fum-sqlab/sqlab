@@ -103,3 +103,32 @@ class Page_Form(models.Model):
 
     class Meta:
         unique_together = ('page', 'form', 'section')
+
+class Group(models.Model):
+    '''
+    Model for group of form
+    '''
+    id = models.AutoField(primary_key=True)
+    gp_name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+    form = models.ManyToManyField('Form', through='Group_Field')
+    permissions = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey('User', on_delete=models.SET_NULL,
+                                   null=True, blank=True)
+    updated_on = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL,
+                                   null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Fields\' Group'
+
+class Group_Form(models.Model):
+    '''
+    Model for connection between Group and Form.
+    '''
+    group = models.ForeignKey('Group', on_delete=models.SET_NULL)
+    form = models.ForeignKey('Form', on_delete=models.SET_NULL)
+
+    class Meta:
+        unique_together = ('group', 'form')
