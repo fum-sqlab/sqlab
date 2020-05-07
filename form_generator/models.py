@@ -132,3 +132,14 @@ class Group_Form(models.Model):
 
     class Meta:
         unique_together = ('group', 'form')
+
+class History(models.Model):
+    '''
+    Model for a history. each form can have many versions of history.
+    '''
+    id = models.IntegerField()
+    form_data = models.ForeignKey('Form_Field', on_delete=models.SET_NULL)
+    history_info = models.CharField(max_length=200, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
