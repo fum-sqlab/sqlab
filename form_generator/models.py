@@ -56,3 +56,23 @@ class Form_Field(models.Model):
     required = models.BooleanField(default=None, null=True, blank=True)
     enable = models.BooleanField(default=None, null=True, blank=True)
     visible = models.BooleanField(default=None, null=True, blank=True)
+
+
+class Page(models.Model):
+    '''
+    Model fot Page
+    '''
+    id = models.AutoField(primaey_key=True)
+    slug = models.SlugField(max_length=100, unique=True)
+    forms = models.ManyToManyField('Form', through='Page_Form')
+    title = models.CharField(max_length=100)
+    description = models.TextField(max_length=200, null=True, blank=True)
+    text_body = models.CharField(default=None, max_length=1000, null=True, blank=True)
+    enable = models.BooleanField(default=True)
+    visible = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey('User', on_delete=models.SET_NULL,
+                                   blank=True, null=True)
+    update_by = models.ForeignKey('User', on_delete=models.SET_NULL,
+                                   blank=True, null=True)
