@@ -76,3 +76,18 @@ class Page(models.Model):
                                    blank=True, null=True)
     update_by = models.ForeignKey('User', on_delete=models.SET_NULL,
                                    blank=True, null=True)
+
+class Section(models.Model):
+    '''
+    Model for Section. It is a place to holding a form in it.
+    '''
+    id = models.AutoField(unique=True)
+    title = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=100, unique=True)
+    placeholder = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey('User', on_delete=models.SET_NULL,
+                                   blank=True, null=True)
+    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL,
+                                   blank=True, null=True)
