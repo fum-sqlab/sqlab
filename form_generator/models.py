@@ -91,3 +91,15 @@ class Section(models.Model):
                                    blank=True, null=True)
     updated_by = models.ForeignKey('User', on_delete=models.SET_NULL,
                                    blank=True, null=True)
+
+
+class Page_Form(models.Model):
+    '''
+    Model for connection between a form and section a page. these should be unique
+    '''
+    page = models.ForeignKey('Page', on_delete=models.SET_NULL)
+    form = models.ForeignKey('Form', on_delete=models.SET_NULL)
+    section = models.ForeignKey('Section', on_delete=models.SET_NULL)
+
+    class Meta:
+        unique_together = ('page', 'form', 'section')
