@@ -139,6 +139,7 @@ class History(models.Model):
     '''
     id = models.IntegerField()
     form_data = models.ForeignKey('Form_Field', on_delete=models.SET_NULL)
+    answer = models.ForeignKey('Answer', on_delete=models.SET_NULL)
     history_info = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
