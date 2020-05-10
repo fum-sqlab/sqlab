@@ -44,7 +44,7 @@ class Form_Field(models.Model):
     '''
     id = models.BigAutoField(primary_key = True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE)
-    field = models.ForeignKey(Field, on_delete=models.SET_NULL)
+    field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
     name = models.CharField(default=None, null=True, blank=True, max_length=50)
     label = models.CharField(default=None, null=True, blank=True,max_length=50)
     description = models.CharField(default=None, max_length=100, null=True, blank=True)
@@ -111,7 +111,7 @@ class Group(models.Model):
     id = models.AutoField(primary_key=True)
     gp_name = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
-    form = models.ManyToManyField('Form', through='Group_Field')
+    form = models.ManyToManyField('Form', through='Group_Form')
     permissions = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL,
@@ -146,7 +146,7 @@ class History(models.Model):
 
 class Submission(models.Model):
     id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey('User', on_delete=models.SET_NULL)
+    user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
     page = models.ForeignKey('Page_Form', on_delete=models.SET_NULL, null=True)
     date_time = models.DateTimeField(auto_now_add=True)
 
