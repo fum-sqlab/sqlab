@@ -44,7 +44,7 @@ class Form_Field(models.Model):
     '''
     id = models.BigAutoField(primary_key = True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE)
-    field = models.ForeignKey(Field, on_delete=models.CASCADE)
+    field = models.ForeignKey(Field, on_delete=models.SET_NULL)
     name = models.CharField(default=None, null=True, blank=True, max_length=50)
     label = models.CharField(default=None, null=True, blank=True,max_length=50)
     description = models.CharField(default=None, max_length=100, null=True, blank=True)
@@ -79,7 +79,7 @@ class Page(models.Model):
 
 class Section(models.Model):
     '''
-    Model for Section. It is a place to holding a form in it.
+    Model for Section. It is a place in which holding a page.
     '''
     id = models.AutoField(unique=True)
     title = models.CharField(max_length=50)
@@ -97,9 +97,9 @@ class Page_Form(models.Model):
     '''
     Model for connection between a form and section a page. these should be unique
     '''
-    page = models.ForeignKey('Page', on_delete=models.SET_NULL)
-    form = models.ForeignKey('Form', on_delete=models.SET_NULL)
-    section = models.ForeignKey('Section', on_delete=models.SET_NULL)
+    page = models.ForeignKey('Page', on_delete=models.CASCADE)
+    form = models.ForeignKey('Form', on_delete=models.CASCADE)
+    section = models.ForeignKey('Section', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('page', 'form', 'section')
@@ -127,8 +127,8 @@ class Group_Form(models.Model):
     '''
     Model for connection between Group and Form.
     '''
-    group = models.ForeignKey('Group', on_delete=models.SET_NULL)
-    form = models.ForeignKey('Form', on_delete=models.SET_NULL)
+    group = models.ForeignKey('Group', on_delete=models.CASCADE)
+    form = models.ForeignKey('Form', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('group', 'form')
@@ -143,4 +143,9 @@ class History(models.Model):
     history_info = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+
+class Answer(models.Model):
+    user = models.ForeignKey('User', on_delete=models.SET_NULL)
+
 
