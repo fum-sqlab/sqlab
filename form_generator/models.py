@@ -138,14 +138,25 @@ class History(models.Model):
     Model for a history. each form can have many versions of history.
     '''
     id = models.IntegerField()
-    form_data = models.ForeignKey('Form_Field', on_delete=models.SET_NULL)
-    answer = models.ForeignKey('Answer', on_delete=models.SET_NULL)
+    form_data = models.ForeignKey('Form_Field', on_delete=models.SET_NULL, null=True)
+    answer = models.ForeignKey('Answer', on_delete=models.SET_NULL, null=True)
     history_info = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+class Submission(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey('User', on_delete=models.SET_NULL)
+    page = models.ForeignKey('Page_Form', on_delete=models.SET_NULL, null=True)
+    date_time = models.DateTimeField(auto_now_add=True)
 
 class Answer(models.Model):
-    user = models.ForeignKey('User', on_delete=models.SET_NULL)
+    id = models.BigAutoField(primary_key=True)
+    submission = models.ForeignKey('Submission', on_delete=models.CASCADE)
+    field = models.ForeignKey('Field', on_delete=models.CASCADE)
+    value = models.CharField(default=None, max_length=200)
+
+
+
 
 
