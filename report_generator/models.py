@@ -22,3 +22,5 @@ class reportField(models.Model):
 class report_reportField(models.Model):
     reportF = models.ForeignKey(reportField, on_delete=models.CASCADE)
     report = models.ForeignKey(report, on_delete=models.CASCADE)
+
+
