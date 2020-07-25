@@ -34,6 +34,7 @@ def form_list(request):
             return Response(form_serializer.data, status=status.HTTP_201_CREATED)
         return Response(form_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+<<<<<<< HEAD
 @api_view(['GET'])
 def get_specific_form(request, primary_key):
     '''
@@ -66,3 +67,20 @@ def delete_specific_form(request, primary_key):
     if request.method == 'DELETE':
         form.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+=======
+
+@api_view(['GET'])
+def get_specific_form(request, primary_key):
+    '''
+        Retrive a specifi form
+    '''
+    try:
+        form = Form.objects.get(pk=primary_key)
+    except Form.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        form_serializer = FormSerializer(form, many=True)
+        return Response(form_serializer.data, status=status.HTTP_200_OK)
+        
+>>>>>>> 11e96110ef26c21ee9f2136acdc12a7b12c37afb
