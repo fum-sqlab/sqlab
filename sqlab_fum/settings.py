@@ -37,14 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
 
-    'base.apps.AppConfig',
-    'form_generator.apps.AppConfig',
-    'report_generator.apps.AppConfig',
-    'ui_manager.apps.AppConfig',
-    'user.apps.AppConfig',
-    'workflow.apps.AppConfig',
+    'base.apps.BaseConfig',
+    'form_generator.apps.FormGeneratorConfig',
+    'report_generator.apps.ReportGeneratorConfig',
+    'ui_manager.apps.UiManagerConfig',
+    # 'user.apps.UserConfig',
+    'workflow.apps.WorkflowConfig',
 ]
 
 MIDDLEWARE = [
