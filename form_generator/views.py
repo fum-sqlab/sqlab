@@ -25,5 +25,18 @@ def form_list(request):
             return Response(form_serializer.data, status=status.HTTP_201_CREATED)
         return Response(form_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    else:
-        return Response()
+
+@api_view(['GET'])
+def get_specific_form(request, primary_key):
+    '''
+        Retrive a specifi form
+    '''
+    try:
+        form = Form.objects.get(pk=primary_key)
+    except Form.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        form_serializer = FormSerializer(form, many=True)
+        return Response(form_serializer.data, status=status.HTTP_200_OK)
+        
