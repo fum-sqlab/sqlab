@@ -31,9 +31,20 @@ class FormSerializer(serializers.ModelSerializer):
     '''
         Form Serializers Model
     '''
-    fields = FieldSerializer(many=True, read_only=True)
+    fields = FieldSerializer(many=True, read_only=True, through='FormFieldSeializer')
     class Meta:
         model = Form
         field = ['id', 'title', 'description', 'fields',
                  'visible', 'enable', 'created_by',
                  'updated_by']
+
+    def create(self, **new_form_data):
+        '''
+            Override creat() method.
+            For each Field in form, create a new object in Field table
+        '''
+        fields_data = new_form_data.pop('fields')
+        form = Form.objects.create(**new_form_data)
+        for field_data in fields_data:
+            Field.objects.create(**field_data)
+        return form
