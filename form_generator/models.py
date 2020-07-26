@@ -29,7 +29,7 @@ class Form(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=200, blank=True, null=True)
-    fields = models.ManyToManyField(Field, through="Form_Field", related_name="Fields")
+    fields = models.ManyToManyField(Field, through="FormField", related_name="Fields")
     visible = models.BooleanField(default=True)
     enable = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -48,6 +48,9 @@ class FormField(models.Model):
     '''
     form = models.ForeignKey(Form, on_delete=models.CASCADE)
     field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        unique_together = ['form', 'field']
     # order = models.IntegerField(null=True, blank=True)
     # name = models.CharField(default=None, null=True, blank=True, max_length=50)
     # label = models.CharField(default=None, null=True, blank=True,max_length=50)
@@ -66,7 +69,7 @@ class Page(models.Model):
     Model fot Page
     '''
     slug = models.SlugField(max_length=100, unique=True)
-    forms = models.ManyToManyField('Form', through='Page_Form')
+    forms = models.ManyToManyField('Form', through='PageForm')
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=200, null=True, blank=True)
     text_body = models.CharField(default=None, max_length=1000, null=True, blank=True)
@@ -110,7 +113,7 @@ class Group(models.Model):
     '''
     gp_name = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
-    form = models.ManyToManyField('Form', through='Group_Form')
+    form = models.ManyToManyField('Form', through='GroupForm')
     permissions = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
@@ -136,7 +139,7 @@ class History(models.Model):
     '''
     Model for a history. each form can have many versions of history.
     '''
-    form_data = models.ForeignKey('Form_Field', on_delete=models.SET_NULL, null=True)
+    form_data = models.ForeignKey('FormField', on_delete=models.SET_NULL, null=True)
     answer = models.ForeignKey('Answer', on_delete=models.SET_NULL, null=True)
     history_info = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -144,7 +147,7 @@ class History(models.Model):
 
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    page = models.ForeignKey('Page_Form', on_delete=models.SET_NULL, null=True)
+    page = models.ForeignKey('PageForm', on_delete=models.SET_NULL, null=True)
     date_time = models.DateTimeField(auto_now_add=True)
 
 class Answer(models.Model):
