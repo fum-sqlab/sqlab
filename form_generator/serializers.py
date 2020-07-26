@@ -1,29 +1,39 @@
+'''
+    Created By Sara-Bolouri
+    Created At 07-26-2020
+'''
 from rest_framework import serializers
-from ..models import Form, Field, Form_Field
+from .models import Form, Field, FormField
 
-class FieldSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField(max_length=50)
-    label = serializers.CharField(max_length=50)
-    field_type = serializers.CharField(max_length=50)
-    description = serializers.CharField(max_length=1000)
-    help_text = serializers.CharField(max_length=1000)
-    min_val = serializers.CharField(max_length=50, default=None)
-    max_val = serializers.CharField(max_length=50, default=None)
-    default_val = serializers.CharField(max_length=50, default=None)
-    required = serializers.BooleanField(default=False)
-    visible = serializers.BooleanField(default=True)
-    enable = serializers.BooleanField(default=True)
+class FieldSerializer(serializers.ModelSerializer): 
+    '''
+        Field Serializers Model
+    '''
+    class Meta:
+        model = Field
+        field = ['id', 'name', 'label', 'field_type',
+                 'description', 'help_text', 'min_val',
+                 'max_val', 'default_val', 'required',
+                 'visible', 'enable']
 
+class FormFieldSeializer(serializers.ModelSerializer):
+    '''
+        Many-To-Many relationships between Form and Field
+    '''
+    field = serializers.PrimaryKeyRelatedField(queryset=Field.objects.all())
+    form = serializers.PrimaryKeyRelatedField(queryset=Form.objects.all())
 
-class FormSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length=50)
-    description = serializers.CharField(max_length=1000)
-    visible = serializers.BooleanField(default=True)
-    enable = serializers.BooleanField(default=True)
-    created_by = serializers.CharField(max_length=50)
-    updated_by = serializers.CharField(max_length=50)
+    class Meta:
+        model = FormField
+        field = ['id', 'field', 'form']
+
+class FormSerializer(serializers.ModelSerializer):
+    '''
+        Form Serializers Model
+    '''
     fields = FieldSerializer(many=True, read_only=True)
-
-
+    class Meta:
+        model = Form
+        field = ['id', 'title', 'description', 'fields',
+                 'visible', 'enable', 'created_by',
+                 'updated_by']
