@@ -1,26 +1,9 @@
+'''
+    Created By Sara-Bolouri
+    Created At 07-26-2020
+'''
 from django.db import models
 from django.contrib.auth.models import User
-
-
-class Form(models.Model):
-    '''
-    Model for each Form
-    '''
-    slug = models.SlugField(max_length=100, unique=True)
-    title = models.CharField(max_length=50)
-    description = models.TextField(max_length=200, blank=True, null=True)
-    fields = models.ManyToManyField('Field', through='Form_Field')
-    visible = models.BooleanField(default=True)
-    enable = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
-                                   null=True, blank=True, related_name='form_created_by')
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL,
-                                   null=True, blank=True, related_name='form_updated_by')
-
-    def __str__(self):
-        return self.title
 
 class Field(models.Model):
 
@@ -39,8 +22,27 @@ class Field(models.Model):
     enable = models.BooleanField(default=True)
     visible = models.BooleanField(default=True)
 
-    
-class Form_Field(models.Model):
+class Form(models.Model):
+    '''
+    Model for each Form
+    '''
+    slug = models.SlugField(max_length=100, unique=True)
+    title = models.CharField(max_length=50)
+    description = models.TextField(max_length=200, blank=True, null=True)
+    fields = models.ManyToManyField(Field, through="Form_Field", related_name="Fields")
+    visible = models.BooleanField(default=True)
+    enable = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+                                   null=True, blank=True, related_name='form_created_by')
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+                                   null=True, blank=True, related_name='form_updated_by')
+
+    def __str__(self):
+        return self.title
+
+class FormField(models.Model):
     '''
     Model for connection between Form and Field table
     '''
@@ -91,7 +93,7 @@ class Section(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL,
                                    blank=True, null=True, related_name='section_updated_by')
 
-class Page_Form(models.Model):
+class PageForm(models.Model):
     '''
     Model for connection between a form and section a page. these should be unique
     '''
@@ -120,7 +122,7 @@ class Group(models.Model):
     class Meta:
         verbose_name = 'Fields\' Group'
 
-class Group_Form(models.Model):
+class GroupForm(models.Model):
     '''
     Model for connection between Group and Form.
     '''
@@ -149,8 +151,3 @@ class Answer(models.Model):
     submission = models.ForeignKey('Submission', on_delete=models.CASCADE)
     field = models.ForeignKey('Field', on_delete=models.CASCADE)
     value = models.CharField(default=None, max_length=200)
-
-
-
-
-
