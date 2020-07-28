@@ -47,6 +47,14 @@ def update_form(request, primary_key):
         updated_form.save()
         return Response(updated_form.data)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def create_page(request):
+    page_serializer = PageSerializer(data=request.data)
+    if page_serializer.is_valid():
+        page_serializer.save()
+        return Response(page_serializer.data, status=status.HTTP_200_OK)
+    return Response(page_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     
     
