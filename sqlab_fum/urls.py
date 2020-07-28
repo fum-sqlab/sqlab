@@ -18,6 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('form/', include('form_generator.urls', namespace='form-api')) #http://127.0.0.1:8000/form/
-
+    path('form/', include('form_generator.urls', namespace='form-api')), #http://127.0.0.1:8000/form/...
+    path('page/', include('form_generator.urls', namespace='page-api'))  #http://127.0.0.1:8000/page/...
 ]
