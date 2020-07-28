@@ -74,3 +74,20 @@ class FormSerializer(serializers.ModelSerializer):
         
         return instance
 
+class PageSerializer(serializers.ModelSerializer):
+    forms = FormSerializer(many=True)
+    class Meta:
+        model = Page
+        fields = '__all__'
+
+    def create(self, valide_data):
+        all_forms = valide_data.pop('forms')
+        page = Page.objects.create(**valide_data)
+        forms = []
+        for form in all_forms:
+            new_form = Form(**form)
+            new_form.save()
+            forms.append(new_form)
+        page.forms.add(*forms)
+        page.save()
+        return page
