@@ -26,21 +26,18 @@ class Form(models.Model):
     '''
     Model for each Form
     '''
-    slug = models.SlugField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, default=None)
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=200, blank=True, null=True)
-    fields = models.ManyToManyField(Field, through="FormField", related_name="Fields")
+    fields = models.ManyToManyField(Field, through="FormField", related_name="fields")
     visible = models.BooleanField(default=True)
     enable = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    null=True, blank=True, related_name='form_created_by')
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    null=True, blank=True, related_name='form_updated_by')
-
-    def __str__(self):
-        return self.title
 
 class FormField(models.Model):
     '''
@@ -77,9 +74,9 @@ class Page(models.Model):
     visible = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     update_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    blank=True, null=True, related_name='page_created_by')
-    update_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    update_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    blank=True, null=True, related_name='page_updated_by')
 
 class Section(models.Model):
@@ -91,9 +88,9 @@ class Section(models.Model):
     placeholder = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    blank=True, null=True, related_name='section_created_by')
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    blank=True, null=True, related_name='section_updated_by')
 
 class PageForm(models.Model):
@@ -116,10 +113,10 @@ class Group(models.Model):
     form = models.ManyToManyField('Form', through='GroupForm')
     permissions = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    null=True, blank=True, related_name='group_created_by')
     updated_on = models.DateTimeField(auto_now_add=True)
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    null=True, blank=True, related_name='group_updated_by')
 
     class Meta:
@@ -146,7 +143,7 @@ class History(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
 class Submission(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     page = models.ForeignKey('PageForm', on_delete=models.SET_NULL, null=True)
     date_time = models.DateTimeField(auto_now_add=True)
 
