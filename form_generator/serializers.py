@@ -3,21 +3,25 @@
     Created At 07-26-2020
 '''
 from rest_framework import serializers
-from .models import Form, Field
+from .models import Form, Field, Page, Section, Group
 
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
+    
 class FieldSerializer(serializers.ModelSerializer): 
-    # id = serializers.IntegerField(required=False)
     class Meta:
         model = Field
         fields = '__all__'
 
 class FormSerializer(serializers.ModelSerializer):
-
     fields = FieldSerializer(many=True)
-    
+    groups = GroupSerializer(many=True, required=False)
     class Meta:
         model = Form
         fields = '__all__'
+        
 
     def create(self, valide_data):
         '''
@@ -74,20 +78,35 @@ class FormSerializer(serializers.ModelSerializer):
         
         return instance
 
+class SectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields = '__all__'
+
 class PageSerializer(serializers.ModelSerializer):
     forms = FormSerializer(many=True)
+    sections = SectionSerializer(many=True)
     class Meta:
         model = Page
         fields = '__all__'
 
     def create(self, valide_data):
         all_forms = valide_data.pop('forms')
+        all_sections = valide_data.pop('sections')
         page = Page.objects.create(**valide_data)
-        forms = []
+        lst = []
         for form in all_forms:
             new_form = Form(**form)
             new_form.save()
-            forms.append(new_form)
-        page.forms.add(*forms)
+            lst.append(new_form)
+        page.forms.add(*lst)
+        lst.clear()
+        for section in all_sections:
+            new_sec = Section(**section)
+            new_sec.save()
+            lst.append(new_sec)
+        page.sections.add(*lst)
         page.save()
         return page
+
+
