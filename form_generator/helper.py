@@ -1,3 +1,6 @@
+from .models import Form, Group
+
+
 def get_form_object(primary_key):
     '''
         Retrive a specific object
@@ -9,6 +12,6 @@ def get_form_object(primary_key):
 
 def get_group_object(primary_key):
     try:
-        group = Group.objects.get(pk=primary_key)
-    except Group.DoesNotExist or Form.DoesNotExist:
+        return Group.objects.get(pk=primary_key)
+    except Group.DoesNotExist:
         return Response({"message":"This group doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
