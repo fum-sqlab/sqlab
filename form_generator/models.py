@@ -111,7 +111,7 @@ class Group(models.Model):
     '''
     gp_name = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
-    form = models.ManyToManyField('Form', through='GroupForm', related_name='form')
+    form = models.ManyToManyField('Form', through='GroupForm', related_name='formGroup')
     permissions = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,
