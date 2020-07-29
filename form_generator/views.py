@@ -5,7 +5,7 @@
 from form_generator.models import Form, Page, Section, Group
 from form_generator.serializers import FormSerializer, PageSerializer, SectionSerializer, GroupSerializer
 from rest_framework import status, viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 
 def get_object(primary_key):
@@ -70,6 +70,17 @@ class GroupView(viewsets.ViewSet):
             return Response(group_serializer.data, status=status.HTTP_201_CREATED)
         return Response(group_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=['POST'])
+    def add_form_to_group(self, request, gp_pk, form_pk):
+        try:
+            group = Group.objects.get(pk=gp_pk)
+            form = Form.objects.get(pk=form_pk)
+        except Group.DoesNotExist or Form.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        lst = [form]
+        group.form.add(*lst)
+        group.save()
+        return Response(status=status.HTTP_200_OK) 
 
 
 
@@ -107,15 +118,5 @@ def add_form(requesrt, page_pk, section_pk, form_pk):
     return Response(page, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-def add_form_to_group(request, gp_pk, form_pk):
-    try:
-        group = Group.objects.get(pk=gp_pk)
-        form = Form.objects.get(pk=form_pk)
-    except Group.DoesNotExist or Form.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    lst = []
-    lst.append(form)
-    group.form.add(*lst)
-    group.save()
-    return Response(status=status.HTTP_200_OK)
-    
+def testing(request):
+    pass
