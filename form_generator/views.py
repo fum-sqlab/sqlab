@@ -52,16 +52,30 @@ class FormView(viewsets.ViewSet):
 class GroupView(viewsets.ViewSet):
 
     def list(self, request):
+        '''
+            Get all groups
+        '''
         groups = Group.objects.all()
         groups_serializer = GroupSerializer(groups, many=True)
         return Response(groups_serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
+        '''
+            Create a new group
+        '''
         group_serializer = GroupSerializer(data=request.data)
         if group_serializer.is_valid():
             group_serializer.save()
             return Response(group_serializer.data, status=status.HTTP_201_CREATED)
         return Response(group_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        '''
+            Delete a group
+        '''
+        group = get_group_object(primary_key=pk)
+        group.delete()
+        return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['PUT'])
     def add_form_to_group(self, request, gp_pk, form_pk):
@@ -77,6 +91,9 @@ class GroupView(viewsets.ViewSet):
     
     @action(detail=True, methods=['PUT'])
     def remove_form_from_grou(self, request, gp_pk, form_pk):
+        '''
+            Remove a from from list of specific group
+        '''
         try:
             GroupForm.objects.filter(form=form_pk, group=gp_pk).delete()
             return Response({"message":"Done"}, status=status.HTTP_200_OK)
