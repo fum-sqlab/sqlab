@@ -17,7 +17,7 @@ class FieldSerializer(serializers.ModelSerializer):
 
 class FormSerializer(serializers.ModelSerializer):
     fields = FieldSerializer(many=True)
-    groups = GroupSerializer(many=True, required=False)
+    formGroup = GroupSerializer(many=True, read_only=True)
     class Meta:
         model = Form
         fields = '__all__'
