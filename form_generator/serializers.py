@@ -80,7 +80,6 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SectionSerializer(serializers.ModelSerializer):
-    form = FormSerializer()
     class Meta:
         model = Section
         fields = '__all__'
@@ -90,7 +89,6 @@ class SectionSerializer(serializers.ModelSerializer):
 
 class PageSerializer(serializers.ModelSerializer):
     forms = FormSerializer(many=True, required=False)
-    sections = SectionSerializer(many=True, required=False)
     class Meta:
         model = Page
         fields = '__all__'

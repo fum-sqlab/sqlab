@@ -67,7 +67,6 @@ class Page(models.Model):
     '''
     slug = models.SlugField(max_length=100, unique=True)
     forms = models.ManyToManyField('Form', through='PageForm', related_name='forms')
-    sections = models.ManyToManyField('Section', through='pageForm', related_name='sections')
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=200, null=True, blank=True)
     text_body = models.CharField(default=None, max_length=1000, null=True, blank=True)
