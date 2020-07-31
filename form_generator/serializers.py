@@ -5,11 +5,7 @@
 from rest_framework import serializers
 from .models import Form, Field, Page, Section, Group
 
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = '__all__'
-    
+   
 class FieldSerializer(serializers.ModelSerializer): 
     class Meta:
         model = Field
@@ -17,7 +13,6 @@ class FieldSerializer(serializers.ModelSerializer):
 
 class FormSerializer(serializers.ModelSerializer):
     fields = FieldSerializer(many=True)
-    formGroup = GroupSerializer(many=True, read_only=True)
     class Meta:
         model = Form
         fields = '__all__'
@@ -78,34 +73,40 @@ class FormSerializer(serializers.ModelSerializer):
         
         return instance
 
+class GroupSerializer(serializers.ModelSerializer):
+    form = FormSerializer(many=True, read_only=True)
+    class Meta:
+        model = Group
+        fields = '__all__'
+
 class SectionSerializer(serializers.ModelSerializer):
+    form = FormSerializer()
     class Meta:
         model = Section
         fields = '__all__'
 
+    def create(self, validate_data):
+        return Section.objects.create(**validate_data)
+
 class PageSerializer(serializers.ModelSerializer):
-    forms = FormSerializer(many=True)
-    sections = SectionSerializer(many=True)
+    forms = FormSerializer(many=True, required=False)
+    sections = SectionSerializer(many=True, required=False)
     class Meta:
         model = Page
         fields = '__all__'
 
     def create(self, valide_data):
-        all_forms = valide_data.pop('forms')
-        all_sections = valide_data.pop('sections')
+        try:
+            all_forms = valide_data.pop('forms')
+            lst = []
+            for form in all_forms:
+                new_form = Form(**form)
+                new_form.save()
+                lst.append(new_form)
+            page.forms.add(*lst)
+        except KeyError:
+            pass
         page = Page.objects.create(**valide_data)
-        lst = []
-        for form in all_forms:
-            new_form = Form(**form)
-            new_form.save()
-            lst.append(new_form)
-        page.forms.add(*lst)
-        lst.clear()
-        for section in all_sections:
-            new_sec = Section(**section)
-            new_sec.save()
-            lst.append(new_sec)
-        page.sections.add(*lst)
         page.save()
         return page
 

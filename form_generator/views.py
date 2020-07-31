@@ -2,12 +2,13 @@
     Created By Sara-Bolouri
     Created At 07-25-2020
 '''
-from form_generator.models import Form, Page, Section, Group, GroupForm
+from form_generator.models import *
 from form_generator.serializers import FormSerializer, PageSerializer, SectionSerializer, GroupSerializer
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
-from .helper import get_group_object, get_form_object
+from .helper import *
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class FormView(viewsets.ViewSet):
@@ -49,6 +50,32 @@ class FormView(viewsets.ViewSet):
             return Response(updated_form.data)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=['PUT'])
+    def add_field_to_form(self, request, field_pk, form_pk):
+        form = get_form_object(primary_key=form_pk)
+        field = get_field_object(primary_key=field_pk)
+
+        if form is None:
+            msg = {"message":"This form doesn't exist"}
+            stu = status.HTTP_400_BAD_REQUEST
+        elif field is None:
+            msg = {"message":"This field doesn't exist"}
+            stu = status.HTTP_400_BAD_REQUEST
+        else:
+            form.fields.add(*[field])
+            form.save()
+            msg = {"message":"Done"}
+            stu = status.HTTP_200_OK
+        return Response(msg, status=stu)
+
+    @action(detail=True, methods=['DELETE'])
+    def remove_field_from_form(self, request, field_pk, form_pk):
+        try:
+            FormField.objects.filter(form=form_pk, field=field_pk).delete()
+            return Response({"message":"Done"}, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({"message":"No data"}, status=status.HTTP_404_NOT_FOUND)
+
 class GroupView(viewsets.ViewSet):
 
     def list(self, request):
@@ -82,14 +109,23 @@ class GroupView(viewsets.ViewSet):
         '''
             Set a form to a specific group
         '''
-        form = get_form_object(primary_key=form_pk)
-        group = get_group_object(primary_key=gp_pk)
-        lst = [form]
-        group.form.add(*lst)
-        group.save()
-        return Response(status=status.HTTP_200_OK)
-    
-    @action(detail=True, methods=['PUT'])
+        form = get_form_object("Form", primary_key=form_pk)
+        group = get_group_object("Group", primary_key=gp_pk)
+        if form is None:
+            msg = {"message":"This form doesn't exist"}
+            stu = status.HTTP_400_BAD_REQUEST
+        elif group is None:
+            msg = {"message":"This group doesn't exist"}
+            stu = status.HTTP_400_BAD_REQUEST
+        else:
+            msg = {}
+            stu = status.HTTP_200_OK
+            lst = [form]
+            group.form.add(*lst)
+            group.save()
+        return Response(msg, status=stu)  
+         
+    @action(detail=True, methods=['DELETE'])
     def remove_form_from_grou(self, request, gp_pk, form_pk):
         '''
             Remove a from from list of specific group
@@ -97,40 +133,55 @@ class GroupView(viewsets.ViewSet):
         try:
             GroupForm.objects.filter(form=form_pk, group=gp_pk).delete()
             return Response({"message":"Done"}, status=status.HTTP_200_OK)
-        except GroupForm.DoesNotExist:
+        except ObjectDoesNotExist:
             return Response({"message":"No data"}, status=status.HTTP_404_NOT_FOUND)
 
+class PageView(viewsets.ViewSet):
 
+    def list(self, request):
+        '''
+            Show all pages
+        '''
+        pages = Page.objects.all()
+        pages_serializer = PageSerializer(pages, many=True)
+        return Response(pages_serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-def create_page(request):
-    page_serializer = PageSerializer(data=request.data)
-    if page_serializer.is_valid():
-        page_serializer.save()
-        return Response(page_serializer.data, status=status.HTTP_200_OK)
-    return Response(page_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def create(self, request):
+        '''
+            Create new page
+        '''
+        page_serializer = PageSerializer(data=request.data)
+        if page_serializer.is_valid():
+            page_serializer.save()
+            return Response(page_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(page_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def create_section(request):
-    section_serializer = SectionSerializer(data=request.data)
-    if section_serializer.is_valid():
-        section_serializer.save()
-        return Response(section_serializer.data, status=status.HTTP_201_CREATED)
-    return Response(section_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def destroy(self, request, pk=None):
+        page = Page.objects.get(pk=pk)
+        page.delete()
+        return Response(status=status.HTTP_200_OK)
 
-@api_view(['PUT'])
-def add_form(request, page_pk, section_pk, form_pk):
-    try:
-        page = Page.objects.get(pk=page_pk)
-        form = Form.objects.get(pk=form_pk)
-        section = Section.objects.get(pk=section_pk)
-    except Page.DoesNotExist or Form.DoesNotExist or Section.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    lst =[]
-    lst.append(form)
-    page.forms.add(*lst)
-    lst.clear()
-    lst.append(section)
-    page.sections.add(*lst)
-    page.save()
-    return Response(page, status=status.HTTP_200_OK)
+    @action(detail=True, methods=['PUT'])
+    def add_form_to_page(self, request, page_pk, form_pk):
+        page = get_page_object(primary_key=page_pk)
+        form = get_form_object(primary_key=form_pk)
+        if form is None:
+            msg = {"message":"This form doesn't exist"}
+            stu = status.HTTP_400_BAD_REQUEST
+        elif page is None:
+            msg = {"message":"This page doesn't exist"}
+            stu = status.HTTP_400_BAD_REQUEST
+        else:
+            page.forms.add(*[form])
+            print(page)
+            section_serializer = SectionSerializer(data=request.data)
+            if section_serializer.is_valid():
+                section_obj = section_serializer.save()
+                page.sections.add(*[section_obj])
+                page.save()
+                msg = {"message":"Done"}
+                stu = status.HTTP_200_OK
+            else:
+                msg = section_serializer.errors
+                stu = status.HTTP_400_BAD_REQUEST 
+        return Response(msg, status=stu)
