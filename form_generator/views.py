@@ -215,12 +215,3 @@ class PageView(viewsets.ViewSet):
                 msg = section_serializer.errors
                 stu = status.HTTP_400_BAD_REQUEST 
         return Response(msg, status=stu)
-
-class SectionView(viewsets.ViewSet):
-
-    def create(self, request):
-        section_serializer = SectionSerializer(data=request.data)
-        if section_serializer.is_valid():
-            section_serializer.save()
-            return section_serializer.data
-        return None
