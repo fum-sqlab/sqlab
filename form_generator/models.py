@@ -6,21 +6,20 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Field(models.Model):
-
     '''
     Model For each data field
     '''
     name = models.CharField(max_length=50)
     label = models.CharField(max_length=50)
-    description = models.CharField(max_length=2000, null=True, blank=True)
-    help_text = models.CharField(max_length=2000)
+    # description = models.CharField(max_length=2000, null=True, blank=True)
+    help_text = models.CharField(max_length=2000, null=True, blank=True)
     field_type = models.CharField(max_length=100)
-    min_value = models.CharField(default=None, null=True, blank=True, max_length=50)
-    max_value = models.CharField(default=None, null=True, blank=True, max_length=50)
-    default_value = models.CharField(default=None, null=True, blank=True, max_length=50)
-    required = models.BooleanField(default=False)
-    enable = models.BooleanField(default=True)
-    visible = models.BooleanField(default=True)
+    # min_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    # max_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    # default_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    # required = models.BooleanField(default=False)
+    # enable = models.BooleanField(default=True)
+    # visible = models.BooleanField(default=True)
 
 class Form(models.Model):
     '''
@@ -44,22 +43,17 @@ class FormField(models.Model):
     Model for connection between Form and Field table
     '''
     form = models.ForeignKey(Form, on_delete=models.CASCADE)
-    field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        unique_together = ['form', 'field']
-    # order = models.IntegerField(null=True, blank=True)
-    # name = models.CharField(default=None, null=True, blank=True, max_length=50)
-    # label = models.CharField(default=None, null=True, blank=True,max_length=50)
-    # description = models.CharField(default=None, max_length=100, null=True, blank=True)
-    # help_text = models.TextField(default=None, null=True, blank=True, max_length=200)
-    # min_value = models.CharField(default=None, null=True, blank=True, max_length=50)
-    # max_value = models.CharField(default=None, null=True, blank=True, max_length=50)
-    # default_value = models.CharField(default=None, null=True, blank=True, max_length=50)
-    # placeHolder = models.CharField(max_length=100)
-    # required = models.BooleanField(default=None, null=True, blank=True)
-    # enable = models.BooleanField(default=None, null=True, blank=True)
-    # visible = models.BooleanField(default=None, null=True, blank=True)
+    field = models.ForeignKey(Field, on_delete=models.CASCADE)
+    name = models.CharField(default=None, null=True, blank=True, max_length=50)
+    label = models.CharField(default=None, null=True, blank=True,max_length=50)
+    description = models.CharField(default=None, max_length=100, null=True, blank=True)
+    min_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    max_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    default_value = models.CharField(default=None, null=True, blank=True, max_length=50)
+    placeHolder = models.CharField(max_length=100, null=True, blank=True,)
+    required = models.BooleanField(default=False, null=True, blank=True)
+    enable = models.BooleanField(default=True, null=True, blank=True)
+    visible = models.BooleanField(default=True, null=True, blank=True)
 
 class Page(models.Model):
     '''

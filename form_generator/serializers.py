@@ -3,42 +3,29 @@
     Created At 07-26-2020
 '''
 from rest_framework import serializers
-from .models import Form, Field, Page, Section, Group
+from .models import Form, Field, Page, Section, Group, FormField
+from django.core.exceptions import ObjectDoesNotExist
 
-   
-class FieldSerializer(serializers.ModelSerializer): 
+
+class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = '__all__'
 
+class FormFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormField
+        fields = '__all__'
+
 class FormSerializer(serializers.ModelSerializer):
-    fields = FieldSerializer(many=True)
+    fields = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Form
         fields = '__all__'
-        
 
     def create(self, valide_data):
-        '''
-            Create new Form object and add all Fields object to this form
-            ----------------------------------------------------------------------------------------
-            Step1: POP fields key/value
-            Step2: Create new Form Object
-            Step3: Create new Field object for each field that was created by User. then save it.
-            Step4: Add List of filed objects to form object
-            step5: Save form object. 
-            ----------------------------------------------------------------------------------------
-        '''
-        all_fields = valide_data.pop('fields')
-        form = Form.objects.create(**valide_data)
-        fields = []
-        for field in all_fields:
-            new_field = Field(**field)
-            new_field.save()
-            fields.append(new_field)
-        form.fields.add(*fields)    
-        form.save()
-        return form
+        return Form.objects.create(**valide_data)
 
     def update(self, instance, new_valid_data):
 
