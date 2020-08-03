@@ -3,9 +3,9 @@
     Created At 07-25-2020
 '''
 from form_generator.models import *
-from form_generator.serializers import FormSerializer, PageSerializer, SectionSerializer, GroupSerializer
+from form_generator.serializers import *
 from rest_framework import status, viewsets
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from .helper import *
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,25 +19,39 @@ class FormView(viewsets.ViewSet):
         '''
         forms = Form.objects.all()
         forms_serializer = FormSerializer(forms, many=True)
-        return Response(forms_serializer.data, status=status.HTTP_200_OK)
+        return Response(forms_serializer.data, status=200)
 
     def create(self, request):
         '''
             Create new Form Object
         '''
-        form_serializer = FormSerializer(data=request.data)
-        if form_serializer.is_valid():
-            form_serializer.save()
-            return Response(form_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(form_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        form_data = request.data
+        all_fields = form_data.pop('fields')
+        form = FormSerializer(data=form_data)
+        if form.is_valid():
+            form.save()
+        else:
+            return Response(form.errors, status=404)
+
+        for field in all_fields:
+            field['field'] = field.pop('field_id')
+            field['form'] = form.data.get('id')
+            new_record = FormFieldSerializer(data=field)
+            if new_record.is_valid():
+                new_record.save()
+            else:
+                return Response(new_record.errors)
+        return Response("Done", status=200)
     
     def destroy(self, request, pk=None):
         '''
             Delete form object that its 'id' is 'pk'
         '''
         form = get_form_object(primary_key=pk)
-        form.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if form is not None:
+            form.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"Error":"Form doesn't find"}, status=404)
 
     def update(self, request, pk=None):
         '''
@@ -52,30 +66,46 @@ class FormView(viewsets.ViewSet):
 
     @action(detail=True, methods=['PUT'])
     def add_field_to_form(self, request, field_pk, form_pk):
-        form = get_form_object(primary_key=form_pk)
-        field = get_field_object(primary_key=field_pk)
-
-        if form is None:
-            msg = {"message":"This form doesn't exist"}
-            stu = status.HTTP_400_BAD_REQUEST
-        elif field is None:
-            msg = {"message":"This field doesn't exist"}
-            stu = status.HTTP_400_BAD_REQUEST
-        else:
-            form.fields.add(*[field])
-            form.save()
-            msg = {"message":"Done"}
-            stu = status.HTTP_200_OK
-        return Response(msg, status=stu)
+        details = request.data
+        details['field'] = field_pk
+        details['form'] = form_pk
+        form_field_seri = FormFieldSerializer(data=details)
+        if form_field_seri.is_valid():
+            form_field_seri.save()
+            return Response(form_field_seri.data, status=200)
+        return Response(form_field_seri.errors, status=400)
 
     @action(detail=True, methods=['DELETE'])
-    def remove_field_from_form(self, request, field_pk, form_pk):
+    def remove_field_from_form(self, request, ff_id):
         try:
-            FormField.objects.filter(form=form_pk, field=field_pk).delete()
+            FormField.objects.filter(id=ff_id).delete()
             return Response({"message":"Done"}, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response({"message":"No data"}, status=status.HTTP_404_NOT_FOUND)
 
+    @action(detail=True, methods=['GET'])
+    def show_form_details(self, request, pk=None):
+        try:
+            form_obj = Form.objects.get(pk=pk)
+            form_seri = FormSerializer(form_obj).data
+            form_field_obj = FormField.objects.filter(form=pk)
+            form_field_seri = FormFieldSerializer(form_field_obj, many=True)
+        except ObjectDoesNotExist:
+            return Response({"Error": "Dosn't found Object"}, status=404)
+        
+        for field in form_field_seri.data:
+            field_id = field.pop('field')
+            try:
+                field_obj = Field.objects.get(pk=field_id)
+                field_seri = FieldSerializer(field_obj)
+                field_type = field_seri.data.get('field_type')
+                field["field_type"] = field_type
+            except ObjectDoesNotExist:
+                return Response({"Error": "Doesn't found field"},status=404)
+
+        form_seri['fields'] = form_field_seri.data
+        return Response(form_seri, status=200)
+        
 class GroupView(viewsets.ViewSet):
 
     def list(self, request):
@@ -126,7 +156,7 @@ class GroupView(viewsets.ViewSet):
         return Response(msg, status=stu)  
          
     @action(detail=True, methods=['DELETE'])
-    def remove_form_from_grou(self, request, gp_pk, form_pk):
+    def remove_form_from_group(self, request, gp_pk, form_pk):
         '''
             Remove a from from list of specific group
         '''
@@ -185,3 +215,12 @@ class PageView(viewsets.ViewSet):
                 msg = section_serializer.errors
                 stu = status.HTTP_400_BAD_REQUEST 
         return Response(msg, status=stu)
+
+class SectionView(viewsets.ViewSet):
+
+    def create(self, request):
+        section_serializer = SectionSerializer(data=request.data)
+        if section_serializer.is_valid():
+            section_serializer.save()
+            return section_serializer.data
+        return None
