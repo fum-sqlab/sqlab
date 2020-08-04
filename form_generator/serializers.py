@@ -3,7 +3,7 @@
     Created At 07-26-2020
 '''
 from rest_framework import serializers
-from .models import Form, Field, Page, Section, Group, FormField
+from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -75,24 +75,15 @@ class SectionSerializer(serializers.ModelSerializer):
         return Section.objects.create(**validate_data)
 
 class PageSerializer(serializers.ModelSerializer):
-    forms = FormSerializer(many=True, required=False)
+    forms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Page
         fields = '__all__'
 
     def create(self, valide_data):
-        try:
-            all_forms = valide_data.pop('forms')
-            lst = []
-            for form in all_forms:
-                new_form = Form(**form)
-                new_form.save()
-                lst.append(new_form)
-            page.forms.add(*lst)
-        except KeyError:
-            pass
-        page = Page.objects.create(**valide_data)
-        page.save()
-        return page
+        return Page.objects.create(**valide_data)
 
-
+class PageFormSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PageForm
+        fields = '__all__'

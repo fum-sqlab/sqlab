@@ -80,20 +80,14 @@ class Section(models.Model):
     title = models.CharField(max_length=50)
     slug = models.SlugField(max_length=100, unique=True)
     placeholder = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
-                                   blank=True, null=True, related_name='section_created_by')
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE,
-                                   blank=True, null=True, related_name='section_updated_by')
 
 class PageForm(models.Model):
     '''
     Model for connection between a form and section a page. these should be unique
     '''
-    page = models.ForeignKey('Page', on_delete=models.CASCADE)
-    form = models.ForeignKey('Form', on_delete=models.CASCADE)
-    section = models.ForeignKey('Section', on_delete=models.CASCADE)
+    page = models.ForeignKey('Page', on_delete=models.DO_NOTHING)
+    form = models.ForeignKey('Form', on_delete=models.DO_NOTHING)
+    section = models.ForeignKey('Section', on_delete=models.DO_NOTHING)
 
     class Meta:
         unique_together = ('page', 'form', 'section')
