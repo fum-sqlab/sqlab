@@ -47,8 +47,17 @@ class FormView(viewsets.ViewSet):
         '''
             Delete form object that its 'id' is 'pk'
         '''
+        print('here-------------------------------------------------------------------------------------')
         form = get_form_object(primary_key=pk)
         if form is not None:
+            try:
+                FormField.objects.filter(form=pk).all().delete()
+            except ObjectDoesNotExist:
+                pass
+            try:
+                PageForm.objects.filter(form=pk).all().delete()
+            except ObjectDoesNotExist:
+                pass
             form.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({"Error":"Form doesn't find"}, status=404)
@@ -180,38 +189,94 @@ class PageView(viewsets.ViewSet):
         '''
             Create new page
         '''
-        page_serializer = PageSerializer(data=request.data)
-        if page_serializer.is_valid():
-            page_serializer.save()
-            return Response(page_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(page_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        page_data = request.data
+        forms = page_data.pop('forms')
+        page = PageSerializer(data=page_data)
+        if page.is_valid():
+            page.save()
+        else:
+            return Response(page.errors, status=400)
+
+        for form in forms:
+            section_data = {
+                "title" : form["section_name"],
+                "slug"  : form["slug"],
+                "placeholder" : form["placeholder"]
+            }
+            section = SectionSerializer(data=section_data)
+            if section.is_valid():
+                section.save()
+            else:
+                return Response(status=400)
+            
+            pageForm_details = {
+                "page" : page.data["id"],
+                "form" : form["id"],
+                "section" : section.data["id"]
+            }
+
+            pageform = PageFormSerializer(data=pageForm_details)
+            if pageform.is_valid():
+                pageform.save()
+            else:
+                return Response(status=404)
+
+        return Response("Done",status=200)
+            
+        # page_serializer = PageSerializer(data=request.data)
+        # if page_serializer.is_valid():
+        #     page_serializer.save()
+        #     return Response(page_serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(page_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
         page = Page.objects.get(pk=pk)
+        try:
+            PageForm.objects.filter(page=pk).all().delete()
+        except ObjectDoesNotExist:
+            pass
         page.delete()
         return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['PUT'])
     def add_form_to_page(self, request, page_pk, form_pk):
-        page = get_page_object(primary_key=page_pk)
-        form = get_form_object(primary_key=form_pk)
-        if form is None:
-            msg = {"message":"This form doesn't exist"}
-            stu = status.HTTP_400_BAD_REQUEST
-        elif page is None:
-            msg = {"message":"This page doesn't exist"}
-            stu = status.HTTP_400_BAD_REQUEST
-        else:
-            page.forms.add(*[form])
-            print(page)
-            section_serializer = SectionSerializer(data=request.data)
-            if section_serializer.is_valid():
-                section_obj = section_serializer.save()
-                page.sections.add(*[section_obj])
-                page.save()
+        section_serializer = SectionSerializer(data=request.data)
+        if section_serializer.is_valid():
+            section_serializer.save()
+            pageform_data = {
+                "form" : form_pk,
+                "page" : page_pk,
+                "section" : section_serializer.data["id"]
+            }
+            pageform = PageFormSerializer(data=pageform_data)
+            if pageform.is_valid():
+                pageform.save()
                 msg = {"message":"Done"}
                 stu = status.HTTP_200_OK
             else:
-                msg = section_serializer.errors
-                stu = status.HTTP_400_BAD_REQUEST 
-        return Response(msg, status=stu)
+                msg = pageform.errors
+                stu = status.HTTP_400_BAD_REQUEST            
+        else:
+            msg = section_serializer.errors
+            stu = status.HTTP_400_BAD_REQUEST 
+        return Response(msg, status=stu) 
+            
+    @action(detail=True, methods=['DELETE'])
+    def remove_form_from_page(self, request, page_pk, form_pk, section_pk):
+        try:
+            PageForm.objects.filter(form=form_pk, page=page_pk, section=section_pk).delete()
+            return Response("deleted", status=200)
+        except ObjectDoesNotExist:
+            return Response("doesn't exist", status=404)
+        
+    # @action(detail=True, methods=['GET'])
+    # def show_page_details(self, request, pk=None):
+    #     page = Page.objects.get(pk=pk)
+    #     page_serializer = PageSerializer(page)
+    #     forms_id = page_serializer.data.pop("forms")
+    #     for form in form_id:
+
+
+
+
+    #     return Response("ok")

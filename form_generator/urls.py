@@ -16,6 +16,6 @@ urlpatterns = [
          name='set_remove_form'),
    
     path('page/', PageView.as_view({'get':'list', 'post':'create'}), name='get_create_page'),
-    path('page/<int:pk>/', PageView.as_view({'delete':'destroy'}), name='delete_page'),
-    path('set_to_page/<int:page_pk>/<int:form_pk>/', PageView.as_view({'put':'add_form_to_page'}), name='set_form_to_page')
+    path('page/<int:pk>/', PageView.as_view({'delete':'destroy', 'get':'show_page_details'}), name='delete_page'),
+    path('page/<int:page_pk>/<int:form_pk>/', PageView.as_view({'put':'add_form_to_page'}), name='set_form_to_page')
 ]
