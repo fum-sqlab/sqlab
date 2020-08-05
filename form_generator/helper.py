@@ -1,40 +1,28 @@
-from .models import Form, Group, Page, Field
-from rest_framework.response import Response
-from rest_framework import status
+from .models import *
+from .exception import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 
-def get_form_object(primary_key):
-    '''
-        Retrive a specific object
-    '''
-    try:
-        return Form.objects.get(pk=primary_key)
-    except ObjectDoesNotExist:
-        return None
 
-def get_group_object(primary_key):
-    '''
-        Retrive a specific object
-    '''
-    try:
-        return Group.objects.get(id=primary_key)
-    except ObjectDoesNotExist:
-        return None
+TYPES = {
+    "form" : Form,
+    "field": Field,
+    "page" : Page,
+    "section" : Section,
+    "group": Group,
+    "formfield" : FormField,
+    "pageform" : PageForm
+}
 
-def get_page_object(primary_key):
-    '''
-        Retrive a specific object
-    '''
+def get_object(type_object=TYPES, primary_key=None):
+    obj = TYPES[type_object]
     try:
-        return Page.objects.get(id=primary_key)
+        return obj.objects.get(pk=primary_key)
     except ObjectDoesNotExist:
-        return None
+        raise exceptions(type_object)
 
-def get_field_object(primary_key):
-    '''
-        Retrive a specific object
-    '''
+def filter_object(type_object="", **kwargs):
+    obj = TYPES[type_object]
     try:
-        return Field.objects.get(id=primary_key)
+        return obj.objects.filter(**kwargs).all()
     except ObjectDoesNotExist:
-        return None
+        raise exceptions(type_object)
