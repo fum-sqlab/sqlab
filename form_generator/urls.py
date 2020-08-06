@@ -13,7 +13,7 @@ urlpatterns = [
 
 
     path('group/', GroupView.as_view({'get':'list', 'post':'create'}) , name='get_create_group'),
-    path('group/<int:pk>/', GroupView.as_view({'delete':'destroy'}), name='delete_group'),
+    path('group/<int:pk>/', GroupView.as_view({'delete':'destroy', 'get':'retrive'}), name='delete_group'),
     path('group/<int:gp_pk>/<int:form_pk>/', GroupView.as_view({'put':'add_form_to_group', 'delete':'remove_form_from_group'}),
          name='set_remove_form'),
    
