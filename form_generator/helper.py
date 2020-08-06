@@ -22,7 +22,11 @@ def get_object(type_object=TYPES, primary_key=None):
 
 def filter_object(type_object="", **kwargs):
     obj = TYPES[type_object]
-    try:
-        return obj.objects.filter(**kwargs).all()
-    except ObjectDoesNotExist:
+    # try:
+    #     return obj.objects.filter(**kwargs).all()
+    # except ObjectDoesNotExist:
+    #     raise exceptions(type_object)
+    resualt = obj.objects.filter(**kwargs).all()
+    if not resualt.exists():
         raise exceptions(type_object)
+    return resualt
