@@ -137,5 +137,6 @@ class Submission(models.Model):
 
 class Answer(models.Model):
     submission = models.ForeignKey('Submission', on_delete=models.CASCADE)
+    form = models.ForeignKey('Form', on_delete=models.CASCADE)
     field = models.ForeignKey('Field', on_delete=models.CASCADE)
     value = models.CharField(default=None, max_length=200)
