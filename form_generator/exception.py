@@ -27,6 +27,10 @@ class exceptions(APIException):
             self.status_code = status.HTTP_404_NOT_FOUND
             default_code = ""
             default_detail = "GROUP_NOT_FOUND."
+        elif type == "pageform":
+            self.status_code = status.HTTP_404_NOT_FOUND
+            default_code = ""
+            default_detail = "PageForm_NOT_FOUND."
 
         super().__init__(detail=default_detail, code=default_code)
 

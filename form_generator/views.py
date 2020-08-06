@@ -8,8 +8,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .helper import *
-from django.core.exceptions import ObjectDoesNotExist
-
+from .exception import exceptions
 
 class FormView(viewsets.ViewSet):
 
@@ -31,7 +30,7 @@ class FormView(viewsets.ViewSet):
         if form.is_valid():
             form.save()
         else:
-            return Response(form.errors, status=404)
+            return Response(form.errors, status=400)
 
         for field in all_fields:
             field['field'] = field.pop('field_id')
@@ -40,33 +39,25 @@ class FormView(viewsets.ViewSet):
             if new_record.is_valid():
                 new_record.save()
             else:
-                return Response(new_record.errors)
-        return Response("Done", status=200)
+                return Response(new_record.errors, status=400)
+        return Response("The New Form Created.", status=200)
     
     def destroy(self, request, pk=None):
         '''
             Delete form object that its 'id' is 'pk'
         '''
-        print('here-------------------------------------------------------------------------------------')
-        form = get_form_object(primary_key=pk)
-        if form is not None:
-            try:
-                FormField.objects.filter(form=pk).all().delete()
-            except ObjectDoesNotExist:
-                pass
-            try:
-                PageForm.objects.filter(form=pk).all().delete()
-            except ObjectDoesNotExist:
-                pass
-            form.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response({"Error":"Form doesn't find"}, status=404)
+        form = get_object(type_object="form", primary_key=pk)
+        filter_object(type_object="formfield", form=pk).all().delete()
+        filter_object(type_object="pageform", form=pk).all().delete()
+        form.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
+    #Havenot tested yet
     def update(self, request, pk=None):
         '''
             Update form object that its 'id' is 'pk'
         '''
-        form = get_form_object(primary_key=pk)
+        form = get_object(type_object="form", primary_key=pk)
         updated_form = FormSerializer(form, data=request.data)
         if updated_form.is_valid():
             updated_form.save()
@@ -139,7 +130,7 @@ class GroupView(viewsets.ViewSet):
         '''
             Delete a group
         '''
-        group = get_group_object(primary_key=pk)
+        group = get_object(type_object="group", primary_key=pk)
         group.delete()
         return Response(status=status.HTTP_200_OK)
 
@@ -148,21 +139,13 @@ class GroupView(viewsets.ViewSet):
         '''
             Set a form to a specific group
         '''
-        form = get_form_object("Form", primary_key=form_pk)
-        group = get_group_object("Group", primary_key=gp_pk)
-        if form is None:
-            msg = {"message":"This form doesn't exist"}
-            stu = status.HTTP_400_BAD_REQUEST
-        elif group is None:
-            msg = {"message":"This group doesn't exist"}
-            stu = status.HTTP_400_BAD_REQUEST
-        else:
-            msg = {}
-            stu = status.HTTP_200_OK
-            lst = [form]
-            group.form.add(*lst)
-            group.save()
-        return Response(msg, status=stu)  
+        form = get_object(type_object="form", primary_key=form_pk)
+        group = get_object(type_object="group", primary_key=gp_pk)
+        
+        lst = [form]
+        group.form.add(*lst)
+        group.save()
+        return Response("ok", status=200)  
          
     @action(detail=True, methods=['DELETE'])
     def remove_form_from_group(self, request, gp_pk, form_pk):
@@ -222,13 +205,7 @@ class PageView(viewsets.ViewSet):
                 return Response(status=404)
 
         return Response("Done",status=200)
-            
-        # page_serializer = PageSerializer(data=request.data)
-        # if page_serializer.is_valid():
-        #     page_serializer.save()
-        #     return Response(page_serializer.data, status=status.HTTP_201_CREATED)
-        # return Response(page_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        
     def destroy(self, request, pk=None):
         page = Page.objects.get(pk=pk)
         try:
@@ -263,20 +240,29 @@ class PageView(viewsets.ViewSet):
             
     @action(detail=True, methods=['DELETE'])
     def remove_form_from_page(self, request, page_pk, form_pk, section_pk):
-        try:
-            PageForm.objects.filter(form=form_pk, page=page_pk, section=section_pk).delete()
-            return Response("deleted", status=200)
-        except ObjectDoesNotExist:
-            return Response("doesn't exist", status=404)
+        filter_object(type_object="pageform", form=form_pk, page=page_pk, section=section_pk).delete()
+        get_object(type_object="section", primary_key=section_pk).delete()
+        return Response("ok", status=200)
         
-    # @action(detail=True, methods=['GET'])
-    # def show_page_details(self, request, pk=None):
-    #     page = Page.objects.get(pk=pk)
-    #     page_serializer = PageSerializer(page)
-    #     forms_id = page_serializer.data.pop("forms")
-    #     for form in form_id:
+    @action(detail=True, methods=['GET'])
+    def show_page_details(self, request, pk=None):
+        page = PageSerializer(get_object(type_object="page", primary_key=pk)).data
+        forms_id = page.pop("forms")
+        print(page)
+        forms = []
+        for form_id in forms_id:
+            form = FormSerializer(get_object(type_object="form", primary_key=form_id)).data
+            form_field = filter_object(type_object="formfield", form=form_id)
+            form_field_data = FormFieldSerializer(form_field, many=True) #all form fields
+            fields = []
+            for field in form_field_data.data:
+                field.pop("form")
+                id = field.pop("field")
+                field_type = FieldSerializer(get_object(type_object="field", primary_key=id)).data["field_type"]
+                field["field_type"] = field_type
+                fields.append(field)
+            form["fields"] = fields
+            forms.append(form)
+        page["forms"] = forms
 
-
-
-
-    #     return Response("ok")
+        return Response(page, status=200)
