@@ -11,6 +11,14 @@ from .helper import *
 from .exception import exceptions
 from .status import *
 
+user =[ 
+    {
+        "id" : 1,
+        "username" : "Sara"
+    }
+]
+
+
 class FormView(viewsets.ViewSet):
 
     def list(self, request):
@@ -262,3 +270,43 @@ class PageView(viewsets.ViewSet):
         page["forms"] = forms
 
         return Response(page, status=200)
+
+class AnswerView(viewsets.ViewSet):
+
+    @action(detail=True, methods=['POST'])
+    def set_answer(self, request):
+        data = request.data
+        page_id = data["id"]
+        page = get_object(type_object="page", primary_key=page_id)
+        page_data = {
+            "page" : page_id,
+            "user" : user
+        }
+        submission = SubmissionSerializer(data=page_data)
+        if submission.is_valid():
+            answers = data["answers"]
+            if answers is not None:
+                form_id = answers[0]["form"]
+                required_list = list_required_field(form_id=form_id)
+                check_list = checking_requirement(requied_field=required_list, answers=answers)
+                if not check_list:
+                    submission.save()
+                    for answer in answers:
+                        answer['submission'] = submission.data["id"]
+                        ans = AnswerSerializer(data=answer)
+                        if ans.is_valid():
+                            ans.save()
+                        else:
+                            filter_object(type_object="submission", id=submission.data["id"]).delete()
+                            return Response(ans.errors, status=INVALID_DATA)           
+                else:
+                    return Response({"message" : "you didn't answer required fileds",
+                                     "fields" : check_list}, status=INCOMPLETE_DATA)
+        else:
+            return Response(submission.errors, status=INVALID_DATA)
+        
+
+        return Response()
+        
+
+

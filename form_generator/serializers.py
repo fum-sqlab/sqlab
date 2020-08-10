@@ -4,8 +4,18 @@
 '''
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'username'] 
+
+class ChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all__'
 
 class FieldSerializer(serializers.ModelSerializer):
     class Meta:
@@ -86,4 +96,21 @@ class PageSerializer(serializers.ModelSerializer):
 class PageFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageForm
+        fields = '__all__'
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Submission
+        fields = '__all__'
+
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = '__all__'
+
+class ChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chioce
         fields = '__all__'
