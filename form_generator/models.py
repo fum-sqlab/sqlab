@@ -5,15 +5,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Chioce(models.Model):
+    name = models.CharField(max_length=50, default=None)
+    slug = models.SlugField(max_length=50)
+
 class Field(models.Model):
     '''
     Model For each data field
     '''
     name = models.CharField(max_length=50)
     label = models.CharField(max_length=50)
-    # description = models.CharField(max_length=2000, null=True, blank=True)
     help_text = models.CharField(max_length=2000, null=True, blank=True)
     field_type = models.CharField(max_length=100)
+    # description = models.CharField(max_length=2000, null=True, blank=True)
     # min_value = models.CharField(default=None, null=True, blank=True, max_length=50)
     # max_value = models.CharField(default=None, null=True, blank=True, max_length=50)
     # default_value = models.CharField(default=None, null=True, blank=True, max_length=50)
@@ -44,6 +48,8 @@ class FormField(models.Model):
     '''
     form = models.ForeignKey(Form, on_delete=models.CASCADE)
     field = models.ForeignKey(Field, on_delete=models.CASCADE)
+    field_choices = models.ManyToManyField(Chioce, through="ChoiceField",
+                                           related_name="field_choices")
     name = models.CharField(default=None, null=True, blank=True, max_length=50)
     label = models.CharField(default=None, null=True, blank=True,max_length=50)
     description = models.CharField(default=None, max_length=100, null=True, blank=True)
@@ -132,11 +138,18 @@ class History(models.Model):
 
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    page = models.ForeignKey('PageForm', on_delete=models.SET_NULL, null=True)
+    page = models.ForeignKey('Page', on_delete=models.SET_NULL, null=True)
     date_time = models.DateTimeField(auto_now_add=True)
 
 class Answer(models.Model):
     submission = models.ForeignKey('Submission', on_delete=models.CASCADE)
     form = models.ForeignKey('Form', on_delete=models.CASCADE)
-    field = models.ForeignKey('Field', on_delete=models.CASCADE)
+    field = models.ForeignKey('FormField', on_delete=models.CASCADE)
     value = models.CharField(default=None, max_length=200)
+
+class ChoiceField(models.Model):
+    choice = models.ForeignKey('Chioce', on_delete=models.CASCADE)
+    field = models.ForeignKey('FormField', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['choice', 'field']
