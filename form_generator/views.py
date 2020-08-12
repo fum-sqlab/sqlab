@@ -56,8 +56,12 @@ class FormView(viewsets.ViewSet):
             Delete form object that its 'id' is 'pk'
         '''
         form = get_object(type_object="form", primary_key=pk)
-        filter_object(type_object="formfield", form=pk).all().delete()
-        filter_object(type_object="pageform", form=pk).all().delete()
+        ffo = filter_for_deleting(type_object="formfield", form=pk)
+        pfo = filter_for_deleting(type_object="pageform", form=pk)
+        if ffo is not None:
+            ffo.delete()
+        if pfo is not None:
+            pfo.delete()
         form.delete()
         return Response(status=DELETED)
 
@@ -94,15 +98,17 @@ class FormView(viewsets.ViewSet):
     @action(detail=True, methods=['GET'])
     def show_form_details(self, request, pk=None):
         form_seri = FormSerializer(get_object(type_object="form", primary_key=pk)).data
-        form_field_seri = FormFieldSerializer(filter_object(type_object="formfield", form=pk), many=True)
-        
-        for field in form_field_seri.data:
-            field_id = field.pop('field')
-            field_seri = FieldSerializer(get_object(type_object="field", primary_key=field_id))
-            field_type = field_seri.data.get('field_type')
-            field["field_type"] = field_type
+        ffs = filter_for_deleting(type_object="formfield", form=pk)
+        if ffs is not None:
+            form_field_seri = FormFieldSerializer(ffs, many=True)
+            
+            for field in form_field_seri.data:
+                field_id = field.pop('field')
+                field_seri = FieldSerializer(get_object(type_object="field", primary_key=field_id))
+                field_type = field_seri.data.get('field_type')
+                field["field_type"] = field_type
 
-        form_seri['fields'] = form_field_seri.data
+            form_seri['fields'] = form_field_seri.data
         return Response(form_seri, status=SUCCEEDED_REQUEST)
         
 class GroupView(viewsets.ViewSet):
