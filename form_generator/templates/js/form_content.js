@@ -1,20 +1,4 @@
-<!DOCTYPE html>
-<html>
-<header>
-  <h3>Form</h3>
-</header>
-<body>
-
-<div id="form_demo">
-  <label for="form_id">Enter Form ID: </label>
-  <input type="text" id="form_id" name="form_id">
-  <button type="button" onclick="localFunc()"> OK </button>
-</div>
-
-
-<script>
-
-  function localFunc(){
+function localFormContent(){
     var form_id_val =  document.getElementById("form_id").value;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -27,9 +11,9 @@
     var url = "http://127.0.0.1:8000/form/" + form_id_val + "/";
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-  }
+}
 
-  function createForm(myObj) {
+function createForm(myObj) {
     text = "<form>"
       for(i = 0; i< myObj.fields.length; i++){
         text += "<label for=\"" + myObj.fields[i].id + "\">" + myObj.fields[i].label + "</label><br>";
@@ -40,9 +24,4 @@
       } 
       text += "</form>";
       return text;
-  }
-  
-</script>
-
-</body>
-</html>
+}
