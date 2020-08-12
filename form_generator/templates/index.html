@@ -16,19 +16,19 @@
        
         
         <button type="button" onclick="loadForms()"> Forms </button>
-        <br><br>
-        <table id="form_table"></table>
-        <div id="form_demo"></div>
-        <br><br>
-
+        <label for="form_id">Enter Form ID: </label>
+        <input type="text" id="form_id" name="form_id">
+        <button type="button" onclick="localFormContent()"> Show </button>
+        <button type="button" onclick="localDeleteForm()"> Delete </button>
+        <br/><br/>
+        
         <div id="form_demo">
-            <label for="form_id">Enter Form ID: </label>
-            <input type="text" id="form_id" name="form_id">
-            <button type="button" onclick="localFormContent()"> OK </button>
+            <table id="form_table"></table>
         </div>
 
         <script id="form" type="text/javascript" src="js/forms.js"></script>
         <script di="contentForm" type="text/javascript" src="js/form_content.js"></script>
+        <script di="deleteForm" type="text/javascript" src="js/form_delete.js"></script>
         
     </body>
 </html>
