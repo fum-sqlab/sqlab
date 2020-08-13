@@ -18,6 +18,11 @@ user =[
     }
 ]
 
+class FieldView(viewsets.ViewSet):
+    def list(self, request):
+        fields = Field.objects.all()
+        fields_serializer = FieldSerializer(fields, many=True)
+        return Response(fields_serializer.data, status=SUCCEEDED_REQUEST)
 
 class FormView(viewsets.ViewSet):
 
