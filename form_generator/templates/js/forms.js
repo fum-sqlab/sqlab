@@ -8,7 +8,7 @@ function loadForms() {
       }
     };
     xhttp.open("GET", "http://127.0.0.1:8000/form/", true);
-    xhttp.send();
+    xhttp.send(null);
 }
 
 function create_list(data) {
