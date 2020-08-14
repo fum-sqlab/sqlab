@@ -21,5 +21,5 @@ function create_list(data) {
                     "</td></tr>";
     }
     table += "</table>";
-    document.getElementById("here").innerHTML = table;
+    document.getElementById("form_table").innerHTML = table;
 }

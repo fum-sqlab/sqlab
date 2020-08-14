@@ -7,18 +7,14 @@
         <link rel="stylesheet" href="HTML/CSS/styles.css">
     </head>
     <body>
-        <div id="here" class="w3-container w3-center">
+        <div class="w3-container w3-center">
             <h2>Form Page</h2>
             <p>Click on buttom which you want to do <strong>Form Generator</strong> module:</p>
             <div id="div1" class="w3-bar">
-                <button id="1" class="w3-button w3-black" onclick="loadForms()">Show All Forms</button>
+                <button id="1" class="w3-button w3-black" onclick="parent.location='HTML/forms.html'">Show All Forms</button>
                 <button id="2" class="w3-button w3-teal" onclick="parent.location='HTML/create_form.html'">Create New Form</button>
                 <button id="3" class="w3-button w3-red">Update a Form</button>
             </div>
         </div>
-
-        <script id="form" type="text/javascript" src="js/forms.js"></script>
-        <script di="contentForm" type="text/javascript" src="js/form_content.js"></script>
-        <script di="deleteForm" type="text/javascript" src="js/form_delete.js"></script>
     </body>
 </html>

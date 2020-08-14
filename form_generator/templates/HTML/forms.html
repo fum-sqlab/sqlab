@@ -1,52 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <style>
-        table,th,td {
-            border : 1px solid black;
-            border-collapse: collapse;
-        }
-        th,td {
-            padding: 5px;
-        }
-    </style>
+    <head>
+        <link rel="stylesheet" href="./CSS/styles.css">
+    </head>
 
-<body>
-
-<h2>All Forms</h2>
-<p>loadDoc()</p>
-<!-- <button type="button" onclick="loadDoc()"> Forms </button> -->
-<br><br>
-<table id="form_table"></table>
-
-  
-<!-- <script>
-function loadDoc() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        var all_forms = JSON.parse(this.responseText);
-        create_list(all_forms);
-    }
-  };
-  xhttp.open("GET", "http://127.0.0.1:8000/form/", true);
-  xhttp.send();
-}
-
-function create_list(data) {
-  var table= "<table>";
-  table += "<tr><th>ID</th><th>Title</th></tr>";
-  for (i = 0; i <data.length; i++) { 
-    table +=    "<tr><td>" +
-                    data[i].id +
-                "</td><td>" +
-                    data[i].title +
-                "</td></tr>";
-  }
-  table += "</table>";
-  return table;
-  // document.getElementById("form_table").innerHTML = table;
-}
-</script> -->
-
-</body>
+    <body onload="loadForms()">
+        <table id="form_table"></table>
+        <script di="contentForm" type="text/javascript" src="../js/forms.js"></script>     
+    </body>
 </html>
