@@ -56,6 +56,14 @@ class FormView(viewsets.ViewSet):
 
         return Response("The New Form Created.", status=CREATED)
     
+    def partial_update(self, request, pk=None):
+        form = get_object(type_object="form", primary_key=pk)
+        updated_form = FormSerializer(form, data=request.data, partial=True)
+        if updated_form.is_valid():
+            updated_form.save()
+            return Response(updated_form.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     def destroy(self, request, pk=None):
         '''
             Delete form object that its 'id' is 'pk'
@@ -69,18 +77,6 @@ class FormView(viewsets.ViewSet):
             pfo.delete()
         form.delete()
         return Response(status=DELETED)
-
-    #Havenot tested yet
-    def update(self, request, pk=None):
-        '''
-            Update form object that its 'id' is 'pk'
-        '''
-        form = get_object(type_object="form", primary_key=pk)
-        updated_form = FormSerializer(form, data=request.data)
-        if updated_form.is_valid():
-            updated_form.save()
-            return Response(updated_form.data)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['PUT'])
     def add_field_to_form(self, request, field_pk, form_pk):
