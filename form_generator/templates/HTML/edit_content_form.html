@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./CSS/styles.css">
+    <link rel="stylesheet" href="./CSS/edit_content.css">
+  </head>
+  <body onload="loadForms()">
+
+    <div id="form_demo">
+      <table id="form_table"></table><br><br>
+      <div class="center">
+        <input type="text" id="form_id" placeholder="Form ID"><br><br>
+        <button type="button" class="button bts" onclick="localFormContent()"> Show </button>
+        <button type="button" class="button btd" onclick="localDeleteForm()" onsubmit="window.location.reload()"> Delete </button>
+      </div>
+      
+    </div>
+
+    <script di="contentForm" type="text/javascript" src="../js/forms.js"></script>
+    <script di="contentForm" type="text/javascript" src="../js/form_delete.js"></script>
+    <script di="contentForm" type="text/javascript" src="../js/form_content.js"></script>
+
+  </body> 
+</html>

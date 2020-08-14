@@ -4,7 +4,6 @@ function localDeleteForm(){
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var myObj = JSON.parse(this.responseText);
-        // form = createForm(myObj);
         document.getElementById("form_demo").innerHTML = JSON.stringify(myObj);
       }
     };
