@@ -8,7 +8,7 @@ urlpatterns = [
      path('field/', FieldView.as_view({'get':'list'}), name='get_fields'),
 
      path('form/', FormView.as_view({'get':'list', 'post':'create'}) , name='get_create_form'),
-     path('form/<int:pk>/', FormView.as_view({'delete':'destroy', 'put':'update', 'get':'show_form_details'}),
+     path('form/<int:pk>/', FormView.as_view({'delete':'destroy', 'patch':'partial_update', 'get':'show_form_details'}),
          name='delete_update_forms'),
      path('form/remove_field/<int:ff_id>/', FormView.as_view({'delete':'remove_field_from_form'}), name='remove_field'),
      path('form/set_field/<int:field_pk>/<int:form_pk>/', FormView.as_view({'put':'add_field_to_form'}), name='set_field'),
