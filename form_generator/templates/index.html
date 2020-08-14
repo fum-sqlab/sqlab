@@ -1,35 +1,24 @@
 <!DOCTYPE html>
 <html>
+    <title>Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <head>
-        <h2> FROMS </h2>
+        <link rel="stylesheet" href="HTML/CSS/styles.css">
     </head>
     <body>
-        <style>
-            table,th,td {
-                border : 1px solid black;
-                border-collapse: collapse;
-            }
-            th,td {
-                padding: 5px;
-            }
-        </style>
-       
-        <button type="button" onclick="parent.location='HTML/create_form.html'"> Create Form </button>
-        <br/><br/>
-        <button type="button" onclick="loadForms()"> Forms </button>
-        <label for="form_id">Enter Form ID: </label>
-        <input type="text" id="form_id" name="form_id">
-        <button type="button" onclick="localFormContent()"> Show </button>
-        <button type="button" onclick="localDeleteForm()"> Delete </button>
-        <br/><br/>
-        
-        <div id="form_demo">
-            <table id="form_table"></table>
+        <div id="here" class="w3-container w3-center">
+            <h2>Form Page</h2>
+            <p>Click on buttom which you want to do <strong>Form Generator</strong> module:</p>
+            <div id="div1" class="w3-bar">
+                <button id="1" class="w3-button w3-black" onclick="loadForms()">Show All Forms</button>
+                <button id="2" class="w3-button w3-teal" onclick="parent.location='HTML/create_form.html'">Create New Form</button>
+                <button id="3" class="w3-button w3-red">Update a Form</button>
+            </div>
         </div>
 
         <script id="form" type="text/javascript" src="js/forms.js"></script>
         <script di="contentForm" type="text/javascript" src="js/form_content.js"></script>
         <script di="deleteForm" type="text/javascript" src="js/form_delete.js"></script>
-        
     </body>
 </html>

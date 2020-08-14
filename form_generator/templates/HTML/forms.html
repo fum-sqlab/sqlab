@@ -13,13 +13,13 @@
 <body>
 
 <h2>All Forms</h2>
-
-<button type="button" onclick="loadDoc()"> Forms </button>
+<p>loadDoc()</p>
+<!-- <button type="button" onclick="loadDoc()"> Forms </button> -->
 <br><br>
 <table id="form_table"></table>
 
   
-<script>
+<!-- <script>
 function loadDoc() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -33,7 +33,8 @@ function loadDoc() {
 }
 
 function create_list(data) {
-  var table="<tr><th>ID</th><th>Title</th></tr>";
+  var table= "<table>";
+  table += "<tr><th>ID</th><th>Title</th></tr>";
   for (i = 0; i <data.length; i++) { 
     table +=    "<tr><td>" +
                     data[i].id +
@@ -41,9 +42,11 @@ function create_list(data) {
                     data[i].title +
                 "</td></tr>";
   }
-  document.getElementById("form_table").innerHTML = table;
+  table += "</table>";
+  return table;
+  // document.getElementById("form_table").innerHTML = table;
 }
-</script>
+</script> -->
 
 </body>
 </html>
