@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="./CSS/form_styles.css">
+    </head>
+    <body>
+        <form id="edit_form_demo"></p>
+    </body>
+    <script>       
+        window.onload = function () {
+            var url = document.location.href,
+                params = url.split('?')[1].split('=')[1];
+            localFormContent(parseInt(params))
+        }
+    </script>
+    <script di="contentForm" type="text/javascript" src="../js/form_content.js"></script>
+</html>

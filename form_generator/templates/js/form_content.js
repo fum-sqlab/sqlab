@@ -1,11 +1,11 @@
-function localFormContent(){
-  var form_id_val =  document.getElementById("form_id").value;
+function localFormContent(_id){
+  var form_id_val = _id;
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var myObj = JSON.parse(this.responseText);
       form = createForm(myObj);
-      document.getElementById("form_demo").innerHTML = form;
+      document.getElementById("edit_form_demo").innerHTML = form;
     }
   };
   var url = "http://127.0.0.1:8000/form/" + form_id_val + "/";
@@ -14,7 +14,9 @@ function localFormContent(){
 }
 
 function createForm(_myObj) {
-  text = "<form>"
+  text = '<form name="' + _myObj.title + '"><div class="container">';
+  text += '<h2>' + _myObj.title + '</h2>';
+  text += '<p>' + _myObj.description + '</p> <hr>';
     myObj = sort(_myObj.fields)
     for(i = 0; i< myObj.length; i++){
       if(myObj[i].field_type == "checkbox"){
@@ -28,7 +30,7 @@ function createForm(_myObj) {
                 "value=\""+ myObj[i].default_value + "\">" + "<br>";
       }
     } 
-  text += "</form>";
+  text += "<div></form>";
   return text;
 }
 
