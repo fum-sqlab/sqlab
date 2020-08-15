@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="./CSS/form_styles.css">
+    </head>
+    <body>
+        <form>
+            <div class="row" id="form">
+                <div class="col-25">
+                    <label for="title">Title</label>
+                </div>
+                <div class="col-75" id="title">
+                    
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col-25">
+                    <label for="description">Description</label>
+                </div>
+                <div class="col-75" id="description">
+                    
+                </div>
+            </div>
+            <div id="checkboxes">              
+                <input id="enable-f" type="checkbox" checked="checked">
+                <label for="enable-f">Enable</label>              
+                <input id="visible-f" type="checkbox" checked="checked">
+                <label for="visible-f">Visible</label>
+            </div>
+        </form>
+    </body>
+    <script>       
+        window.onload = function () {
+            var url = document.location.href,
+                params = url.split('?')[1].split('=')[1];
+            localFormContent(parseInt(params))
+        }
+    </script>
+    <script di="contentForm" type="text/javascript" src="../js/edit_form.js"></script>
+</html>

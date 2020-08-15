@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="./CSS/styles.css">
-    <link rel="stylesheet" href="./CSS/edit_content.css">
+    <link rel="stylesheet" href="./CSS/show_all_forms_styles.css">
+    <link rel="stylesheet" href="./CSS/base_edit_forms_styles.css">
     
   </head>
   <body onload="loadForms()">
@@ -11,19 +11,24 @@
       <table id="form_table"></table><br><br>
       <div class="center">
         <input type="text" id="form_id" placeholder="Form ID"><br><br>
-        <button type="button" class="button bts" onclick="helper()"> Show </button>
+        <button type="button" class="button bts" onclick="show_helper()"> Show </button>
+        <button type="button" class="button bte" onclick="edit_helper()"> Edit </button>
         <button type="button" class="button btd" onclick="localDeleteForm()" onsubmit="window.location.reload()"> Delete </button>
       </div>
     </div>
 
-    <script di="contentForm" type="text/javascript" src="../js/forms.js"></script>
+    <script di="contentForm" type="text/javascript" src="../js/show_all_forms.js"></script>
     <script di="contentForm" type="text/javascript" src="../js/form_delete.js"></script>
-    <script di="contentForm" type="text/javascript" src="../js/form_content.js"></script>
     
     <script>
-        function helper(){
+        function show_helper(){
           var _id = document.getElementById('form_id').value,
           url = './show_especific_form.html?form_id=' + encodeURIComponent(_id);
+          document.location.href = url;
+        }
+        function edit_helper(){
+          var _id = document.getElementById('form_id').value,
+          url = './edit_specific_form.html?form_id=' + encodeURIComponent(_id);
           document.location.href = url;
         }
     </script>

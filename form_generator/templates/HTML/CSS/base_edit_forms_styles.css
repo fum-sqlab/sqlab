@@ -15,7 +15,8 @@ input[type=text] {
   padding: 10px;
 }
 
-.bts {background-color: #4CAF50;}
+.bts {background-color: #000000;}
+.bte {background-color: #009688;}
 .btd {background-color: #f44336;}
 
 .button {
