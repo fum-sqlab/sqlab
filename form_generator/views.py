@@ -11,6 +11,9 @@ from .helper import *
 from .exception import exceptions
 from .status import *
 
+import json
+from django.http import HttpResponse
+
 user =[ 
     {
         "id" : 1,
@@ -58,11 +61,19 @@ class FormView(viewsets.ViewSet):
     
     def partial_update(self, request, pk=None):
         form = get_object(type_object="form", primary_key=pk)
+        fields = request.data["fields"]
         updated_form = FormSerializer(form, data=request.data, partial=True)
         if updated_form.is_valid():
             updated_form.save()
-            return Response(updated_form.data)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        i = 0
+        for field in fields:
+            field = get_object(type_object="formfield", primary_key=field["id"])
+            updated_field = FormFieldSerializer(field, data=request.data["fields"][i], partial=True)
+            if updated_field.is_valid():
+                updated_field.save()
+            else: return Response(updated_field.errors, status=INVALID_DATA)
+            i += 1
+        return Response(status=SUCCEEDED_REQUEST)
 
     def destroy(self, request, pk=None):
         '''
