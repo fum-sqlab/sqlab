@@ -12,12 +12,11 @@ input[type=text], select, textarea {
 }
 
 label {
-    padding: 12px 12px 12px 0;
+    padding: 12px 12px 12px 12px;
     display: inline-block;
 }
 
 input[type=submit] {
-    background-color: #4CAF50;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -27,8 +26,11 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: #bbb797;
 }
+
+.ss {background-color: #009688;}
+.sc {background-color: #f44336;}
 
 table {
     border-collapse: collapse;
