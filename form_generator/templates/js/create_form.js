@@ -70,7 +70,6 @@ function send_data(){
     
     var xhttp = new XMLHttpRequest();
     var data = JSON.stringify(form)
-    document.getElementById("x").innerHTML = data;
     xhttp.open("POST", "http://127.0.0.1:8000/form/", true);
     xhttp.setRequestHeader("Content-Type", "application/json"); 
     xhttp.send(data);
