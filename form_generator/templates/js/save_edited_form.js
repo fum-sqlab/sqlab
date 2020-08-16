@@ -1,9 +1,41 @@
 function localUpdateForm(){
     var form_id = document.getElementById("id").textContent;
+    form = get_form_content_values();
+    
+    var xhttp = new XMLHttpRequest();
+    var url = "http://127.0.0.1:8000/form/" + form_id + "/";
+    var data = JSON.stringify(form)
+    xhttp.open("PATCH", url, true);
+    xhttp.setRequestHeader("Content-Type", "application/json"); 
+    xhttp.send(data);
+}
+
+function get_value(element_id){
+    var checkBox = document.getElementById(element_id);
+    if (checkBox.checked == true){
+        return true;
+    }
+    return false;
+}
+
+function get_form_content_values(){
     var form_title =  document.getElementById("title").value;
     var form_desc = document.getElementById("description").value;
     var form_enable = get_value("enable-f");
-    var form_visible = get_value("visible-f")
+    var form_visible = get_value("visible-f");
+    var fields = get_field_row_table_cotent();
+    var form ={
+        "title": form_title,
+        "slug": "slug_1",
+        "visible": form_visible,
+        "enable": form_enable,
+        "description": form_desc,
+        "fields" : fields
+    }
+    return form;
+}
+
+function get_field_row_table_cotent(){
     var table = document.getElementById("myTable");
     var fields = []
     
@@ -24,28 +56,5 @@ function localUpdateForm(){
         }    
         fields.push(obj);
     }
-    
-    var form ={
-        "title": form_title,
-        "slug": "slug_1",
-        "visible": form_visible,
-        "enable": form_enable,
-        "description": form_desc,
-        "fields" : fields
-    }
-    console.log(JSON.stringify(form))
-    var xhttp = new XMLHttpRequest();
-    var url = "http://127.0.0.1:8000/form/" + form_id + "/";
-    var data = JSON.stringify(form)
-    xhttp.open("PATCH", url, true);
-    xhttp.setRequestHeader("Content-Type", "application/json"); 
-    xhttp.send(data);
-}
-
-function get_value(element_id){
-    var checkBox = document.getElementById(element_id);
-    if (checkBox.checked == true){
-        return true;
-    }
-    return false;
+    return fields;
 }

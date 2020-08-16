@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="./CSS/show_specific_form_styles.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     </head>
     <body>
         <style>
@@ -34,19 +35,20 @@
 
         <h2>Fields</h2>
             <table id="myTable">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Label</th>
-                    <th>Type</th>
-                    <th>Required</th>
-                    <th>Visible</th>
-                    <th>description</th>
-                    <th>min_value</th>
-                    <th>max_value</th>
-                    <th>default_value</th>
-                    <th>PlaceHolder</th>
-                </tr>    
+                    <tr>
+                        <th class="ID">ID</th>
+                        <th>Name</th>
+                        <th>Label</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Visible</th>
+                        <th>description</th>
+                        <th>min_value</th>
+                        <th>max_value</th>
+                        <th>default_value</th>
+                        <th>PlaceHolder</th>
+                        <th></th>
+                    </tr>   
             </table>
             <br><br>
 
@@ -61,6 +63,10 @@
             var url = document.location.href,
                 params = url.split('?')[1].split('=')[1];
             localFormContent(parseInt(params))
+        }
+
+        function helper(x){
+            delete_field(x.parentNode.parentNode.rowIndex);
         }
     </script>
     <script di="contentForm" type="text/javascript" src="../js/edit_form.js"></script>

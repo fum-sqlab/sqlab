@@ -59,7 +59,7 @@ function checkbox_check_l(data, type){
 
 function field(fields, index){
 
-    var table = document.getElementById("myTable");
+    var table = document.getElementById("myTable");  
     var row = table.insertRow(1);
     var id = row.insertCell(0);
     var name = row.insertCell(1);
@@ -72,8 +72,9 @@ function field(fields, index){
     var max_value = row.insertCell(8);
     var default_value = row.insertCell(9);
     var placeholder = row.insertCell(10);
+    var deleted = row.insertCell(11);
 
-    id.innerHTML = fields[index].id;
+    id.innerHTML = fields[index].id; 
     name.innerHTML = '<input id="name" type="text" value="' + fields[index].name + '">';
     label.innerHTML = '<input id="name" type="text" value="' + fields[index].label + '">';
     // - 
@@ -84,6 +85,9 @@ function field(fields, index){
     max_value.innerHTML = '<input id="name" type="text" value="' + fields[index].max_value + '">';
     default_value.innerHTML = '<input id="name" type="text" value="' + fields[index].default_value + '">';
     placeholder.innerHTML = '<input id="name" type="text" value="' + fields[index].placeholder + '">';
+    deleted.innerHTML = '<button class="w3-button w3-red w3-padding-small" onclick="helper(this)">-</button>';
+
+    id.style.display = "none";
 }
 
 function checkbox_check_nl(data, type, id){
@@ -94,6 +98,16 @@ function checkbox_check_nl(data, type, id){
         return '<input id="'+ type + '-' + id + '" type="checkbox">'
     }
 }
+
+function delete_field(id){
+    var table = document.getElementById("myTable");
+    var field_id = table.rows[id].cells.item(0).innerHTML;
+    var xmlhttp = new XMLHttpRequest();
+    var url = "http://127.0.0.1:8000/form/remove_field/" + field_id + "/";
+    xmlhttp.open("DELETE", url, true);
+    xmlhttp.send(null);
+}
+
 
 // function make_selector_field(data, selected){
 //     select = '<select id="field" name="field">';
