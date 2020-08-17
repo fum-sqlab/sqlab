@@ -29,6 +29,15 @@ input[type=submit]:hover {
     background-color: #bbb797;
 }
 
+input[type=button] {
+    background-color: darkgreen;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
 .ss {background-color: #009688;}
 .sc {background-color: #f44336;}
 
