@@ -1,4 +1,4 @@
-function localFormContent(_id){
+function loadFormContent(_id){
     var form_id_val = _id;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -53,7 +53,7 @@ function checkbox_check_l(data, type){
     }
     else{
         return '<input id="' + type + '-f' + '" type="checkbox">' + 
-               '<label for="' + type + '-f' + '>' + TYPE + '</label>';
+               '<label for="' + type + '-f' + '">' + TYPE + '</label>';
     }
 }
 
@@ -92,7 +92,7 @@ function field(fields, index){
 
 function checkbox_check_nl(data, type, id){
     if(data == true){
-        return '<input id="'+ type + '-' + id + '" type="checkbox" checked>'
+        return '<input id="'+ type + '-' + id + '" type="checkbox" checked="checked">'
     }
     else{
         return '<input id="'+ type + '-' + id + '" type="checkbox">'

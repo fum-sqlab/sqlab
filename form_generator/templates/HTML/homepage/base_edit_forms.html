@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="./CSS/show_all_forms_styles.css">
-    <link rel="stylesheet" href="./CSS/base_edit_forms_styles.css">
+    <link rel="stylesheet" href="C:/DjangoCode/sqlab/form_generator/templates/CSS/show_all_forms_styles.css">
+    <link rel="stylesheet" href="C:/DjangoCode/sqlab/form_generator/templates/CSS/base_edit_forms_styles.css">
     
   </head>
   <body onload="loadForms()">
@@ -13,22 +13,22 @@
         <input type="text" id="form_id" placeholder="Form ID"><br><br>
         <button type="button" class="button bts" onclick="show_helper()"> Show </button>
         <button type="button" class="button bte" onclick="edit_helper()"> Edit </button>
-        <button type="button" class="button btd" onclick="localDeleteForm()" onsubmit="window.location.reload()"> Delete </button>
+        <button type="button" class="button btd" onclick="DeleteForm()" onsubmit="window.location.reload()"> Delete </button>
       </div>
     </div>
 
-    <script di="contentForm" type="text/javascript" src="../js/show_all_forms.js"></script>
-    <script di="contentForm" type="text/javascript" src="../js/form_delete.js"></script>
+    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/show_all_forms.js"></script>
+    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/form_delete.js"></script>
     
     <script>
         function show_helper(){
           var _id = document.getElementById('form_id').value,
-          url = './show_especific_form.html?form_id=' + encodeURIComponent(_id);
+          url = '../show_especific_form.html?form_id=' + encodeURIComponent(_id);
           document.location.href = url;
         }
         function edit_helper(){
           var _id = document.getElementById('form_id').value,
-          url = './edit_specific_form.html?form_id=' + encodeURIComponent(_id);
+          url = '../edit_specific_form.html?form_id=' + encodeURIComponent(_id);
           document.location.href = url;
         }
     </script>

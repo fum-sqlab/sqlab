@@ -1,4 +1,4 @@
-function localDeleteForm(){
+function DeleteForm(){
     var form_id_val =  document.getElementById("form_id").value;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {

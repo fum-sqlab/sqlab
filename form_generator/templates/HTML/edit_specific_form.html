@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="./CSS/show_specific_form_styles.css">
+        <link rel="stylesheet" href="C:/DjangoCode/sqlab/form_generator/templates/CSS/show_specific_form_styles.css">
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     </head>
     <body>
@@ -51,9 +51,13 @@
                     </tr>   
             </table>
             <br><br>
-
             <div class="row">
-                <input type="submit" value="Cancle" class="sc" onclick="parent.location='./base_edit_forms.html'">
+                <input type="button" value="+" onclick="localFieldContent()">
+                <input type="button" value="-" onclick="delete_row()">
+            </div>
+            <br><br>
+            <div class="row">
+                <input type="submit" value="Cancle" class="sc" onclick="parent.location='homepage/base_edit_forms.html'">
                 <input type="submit" value="Save" class="ss" onclick="localUpdateForm()">
             </div>
             <p id="x"></p>
@@ -62,14 +66,15 @@
         window.onload = function () {
             var url = document.location.href,
                 params = url.split('?')[1].split('=')[1];
-            localFormContent(parseInt(params))
+            loadFormContent(parseInt(params))
         }
 
         function helper(x){
             delete_field(x.parentNode.parentNode.rowIndex);
         }
     </script>
-    <script di="contentForm" type="text/javascript" src="../js/edit_form.js"></script>
-    <script di="contentForm" type="text/javascript" src="../js/save_edited_form.js"></script>
-    <script di="contentForm" type="text/javascript" src="../js/delete_specific_field.js"></script>
+    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/edit_form.js"></script>
+    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/save_edited_form.js"></script>
+    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/delete_specific_field.js"></script>
+    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/add_new_field.js"></script>
 </html>

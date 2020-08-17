@@ -65,6 +65,8 @@ class FormView(viewsets.ViewSet):
         updated_form = FormSerializer(form, data=request.data, partial=True)
         if updated_form.is_valid():
             updated_form.save()
+        else:
+            return Response(updated_form.errors)
         i = 0
         for field in fields:
             field = get_object(type_object="formfield", primary_key=field["id"])
