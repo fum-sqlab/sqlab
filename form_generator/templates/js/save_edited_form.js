@@ -8,6 +8,11 @@ function localUpdateForm(){
     xhttp.open("PATCH", url, true);
     xhttp.setRequestHeader("Content-Type", "application/json"); 
     xhttp.send(data);
+    xhttp.onload = function () {
+        if (xhttp.status == 200){
+          window.location.reload();
+        }
+    };
 }
 
 function get_form_content_values(){

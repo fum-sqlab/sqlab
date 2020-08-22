@@ -18,7 +18,7 @@ function loadFieldContent(){
     xmlhttp.send();
 }
 function delete_row() {
-    document.getElementById("myTable").deleteRow(-1);
+    document.getElementById("myTable").deleteRow(1);
 }
 
 function add_row(data) {
@@ -73,7 +73,7 @@ function send_data(){
     var fields = get_field_data()
     var form ={
         "title": form_title,
-        "slug": "slug_1",
+        "slug": "slug_"+ form_title,
         "visible": form_visible,
         "enable": form_enable,
         "description": form_desc,
@@ -85,6 +85,11 @@ function send_data(){
     xhttp.open("POST", "http://127.0.0.1:8000/form/", true);
     xhttp.setRequestHeader("Content-Type", "application/json"); 
     xhttp.send(data);
+    xhttp.onload = function () {
+        if (xhttp.status == 201){
+          window.location.reload();
+        }
+    };
 }
 
 function get_field_data(){
