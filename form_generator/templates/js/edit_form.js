@@ -77,7 +77,7 @@ function field(fields, index){
     id.innerHTML = fields[index].id; 
     name.innerHTML = '<input id="name" type="text" value="' + fields[index].name + '">';
     label.innerHTML = '<input id="name" type="text" value="' + fields[index].label + '">';
-    // - 
+    type.innerHTML = '<label>' + fields[index].field_type + '</label>';
     required.innerHTML = checkbox_check_nl(fields[index].required, "required", fields[index].id);
     visible.innerHTML = checkbox_check_nl(fields[index].visible, "visible", fields[index].id);
     description.innerHTML = '<input id="name" type="text" value="' + fields[index].description + '">';
