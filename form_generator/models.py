@@ -61,6 +61,9 @@ class FormField(models.Model):
     enable = models.BooleanField(default=True, null=True, blank=True)
     visible = models.BooleanField(default=True, null=True, blank=True)
 
+    class Meta:
+        ordering = ['form_id']
+
 class Page(models.Model):
     '''
     Model fot Page
