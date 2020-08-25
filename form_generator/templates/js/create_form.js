@@ -73,7 +73,7 @@ function send_data(){
     var fields = get_field_data()
     var form ={
         "title": form_title,
-        "slug": "slug_"+ form_title,
+        "slug": "slug_"+ form_title.split(' ').join('_'),
         "visible": form_visible,
         "enable": form_enable,
         "description": form_desc,

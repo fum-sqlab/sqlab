@@ -84,7 +84,7 @@ function field(fields, index){
     min_value.innerHTML = '<input id="name" type="text" value="' + fields[index].min_value + '">';
     max_value.innerHTML = '<input id="name" type="text" value="' + fields[index].max_value + '">';
     default_value.innerHTML = '<input id="name" type="text" value="' + fields[index].default_value + '">';
-    placeholder.innerHTML = '<input id="name" type="text" value="' + fields[index].placeholder + '">';
+    placeholder.innerHTML = '<input id="name" type="text" value="' + fields[index].placeHolder + '">';
     deleted.innerHTML = '<button class="w3-button w3-red w3-padding-small" onclick="helper(this)">-</button>';
 
     id.style.display = "none";
