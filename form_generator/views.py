@@ -241,6 +241,8 @@ class PageView(viewsets.ViewSet):
 
     @action(detail=True, methods=['PUT'])
     def add_form_to_page(self, request, page_pk, form_pk):
+        get_object(type_object="form", primary_key=form_pk)
+        get_object(type_object="page", primary_key=page_pk)
         section_serializer = SectionSerializer(data=request.data)
         if section_serializer.is_valid():
             section_serializer.save()
