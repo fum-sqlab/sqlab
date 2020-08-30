@@ -1,5 +1,4 @@
-function DeleteForm(){
-    var form_id_val =  document.getElementById("form_id").value;
+function DeleteForm(form_id_val){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {

@@ -6,30 +6,48 @@
     
   </head>
   <body onload="loadForms()">
+    <style>
+      .ID{
+          display: none;
+      }
+    </style>
 
     <div id="edit_form_demo">
       <table id="form_table"></table><br><br>
       <div class="center">
-        <input type="text" id="form_id" placeholder="Form ID"><br><br>
         <button type="button" class="button bts" onclick="show_helper()"> Show </button>
         <button type="button" class="button bte" onclick="edit_helper()"> Edit </button>
-        <button type="button" class="button btd" onclick="DeleteForm()"> Delete </button>
+        <button type="button" class="button btd" onclick="delete_helper()"> Delete </button>
       </div>
     </div>
 
-    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/show_all_forms.js"></script>
+    <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/show_all_forms_editPage.js"></script>
     <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/form_delete.js"></script>
     
     <script>
         function show_helper(){
-          var _id = document.getElementById('form_id').value,
+          var _id = get_id();
           url = '../show_especific_form.html?form_id=' + encodeURIComponent(_id);
           document.location.href = url;
         }
         function edit_helper(){
-          var _id = document.getElementById('form_id').value,
+          var _id = get_id();
           url = '../edit_specific_form.html?form_id=' + encodeURIComponent(_id);
           document.location.href = url;
+        }
+        function delete_helper(){
+          var _id = get_id();
+          DeleteForm(_id);
+        }
+        function get_id(){
+          var table = document.getElementById("form_table");
+          rows = table.rows.length;
+          for(i=1; i<rows; i++){
+            var bool = table.rows[i].cells[2].children[0].checked;
+            if( bool == true ){
+              return table.rows[i].cells[0].textContent;
+            } 
+          }
         }
     </script>
 
