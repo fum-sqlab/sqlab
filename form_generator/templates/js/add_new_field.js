@@ -20,11 +20,12 @@ function create_field_table(data) {
     var type = row.insertCell(3);
     var required = row.insertCell(4);
     var visible = row.insertCell(5);
-    var description = row.insertCell(6);
-    var min_value = row.insertCell(7);
-    var max_value = row.insertCell(8);
-    var default_value = row.insertCell(9);
-    var placeholder = row.insertCell(10);
+    var enable = row.insertCell(6);
+    var description = row.insertCell(7);
+    var min_value = row.insertCell(8);
+    var max_value = row.insertCell(9);
+    var default_value = row.insertCell(10);
+    var placeholder = row.insertCell(11);
     // var add = row.insertCell(11)
 
     id.innerHTML = -1;
@@ -33,6 +34,7 @@ function create_field_table(data) {
     type.innerHTML = make_selector_field(data);
     required.innerHTML = '<input id="required" type="checkbox">';
     visible.innerHTML = '<input id="visible" type="checkbox" checked>';
+    enable.innerHTML = '<input id="enable" type="checkbox" checked>';
     description.innerHTML = '<input id="desc" type="text">';
     min_value.innerHTML = '<input id="minv" type="text">';
     max_value.innerHTML = '<input id="maxv" type="text">';

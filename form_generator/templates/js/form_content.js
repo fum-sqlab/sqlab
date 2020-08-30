@@ -18,25 +18,22 @@ function createForm(_myObj) {
   text += '<p>' + _myObj.description + '</p> <hr>';
   myObj = sort(_myObj.fields)
   for(i = 0; i< myObj.length; i++){
-    if(myObj[i].field_type == "checkbox"){
-      text += checkbox_field(myObj[i])
+    type = myObj[i].field_type;
+    switch(type){
+      case "checkbox":
+        text += checkbox_field(myObj[i]);
+        break;
+      case "button":
+        text += button_field(myObj[i]);
+        break;
+      default:
+        text += similar_field(myObj[i]);
+        break;
     }
-    else{
-      text += "<label for=\"" + myObj[i].id + "\">" + myObj[i].label + "</label><br>";
-      text += "<input type=\"" + myObj[i].field_type + "\"" +
-              "id=\"" + myObj[i].id + "\"" +
-              "name=\"" + myObj[i].name + "\"" +
-              "value=\""+ myObj[i].default_value + "\"";
-    }
-    if(myObj[i].enable == false){
-      text += "disabled"
-    }
-    text += '><br>';
   } 
   text += "<div></form>";
   return text;
 }
-
 function checkbox_field(data){
   check = '<input type="checkbox" id="' + data.id + 
           '" name="' + data.name + 
@@ -47,7 +44,39 @@ function checkbox_field(data){
   
   return check;
 }
+function button_field(data){
+  button = '<input type="button" id="' + data.id +
+           '" value="' + data.default_value +
+           '" name="' + data.name + '"';
 
+  if( data.visible == false ){
+    button += 'style="display: none;"'
+  }
+  if( data.enable == false ){
+    button += "disabled";
+  }
+  button += '>';
+  return button;
+}
+function similar_field(data){
+  label = "<label for=\"" + data.id + '"';
+  text = "<input type=\"" + data.field_type + "\"" +
+         "id=\"" + data.id + "\"" +
+         "name=\"" + data.name + "\"" +
+         "value=\""+ data.default_value + "\"";
+  if( data.visible == false ){
+    label += 'style="display: none;"';
+    text += 'style="display: none;"';
+  }
+  if( data.enable == false ){
+    label += "disabled";
+    text += "disabled";
+  }
+  label += '>' + data.label + "</label><br>"
+  text += '><br>';
+
+  return label+text;
+}
 function sort(data_list){
   for(i=0; i<data_list.length; i++){
     for(j=i+1; j<data_list.length; j++){
