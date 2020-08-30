@@ -26,8 +26,12 @@ function createForm(_myObj) {
       text += "<input type=\"" + myObj[i].field_type + "\"" +
               "id=\"" + myObj[i].id + "\"" +
               "name=\"" + myObj[i].name + "\"" +
-              "value=\""+ myObj[i].default_value + "\">" + "<br>";
+              "value=\""+ myObj[i].default_value + "\"";
     }
+    if(myObj[i].enable == false){
+      text += "disabled"
+    }
+    text += '><br>';
   } 
   text += "<div></form>";
   return text;

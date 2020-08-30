@@ -43,11 +43,12 @@ function get_field_row_table_cotent(){
             "label" : table.rows[i].cells[2].children[0].value,
             "required" : table.rows[i].cells[4].children[0].checked,
             "visible" : table.rows[i].cells[5].children[0].checked,
-            "description" : table.rows[i].cells[6].children[0].value,
-            "min_value" : table.rows[i].cells[7].children[0].value,
-            "max_value" : table.rows[i].cells[8].children[0].value,
-            "default_value" : table.rows[i].cells[9].children[0].value,
-            "placeHolder" : table.rows[i].cells[10].children[0].value
+            "enable" : table.rows[i].cells[6].children[0].checked,
+            "description" : table.rows[i].cells[7].children[0].value,
+            "min_value" : table.rows[i].cells[8].children[0].value,
+            "max_value" : table.rows[i].cells[9].children[0].value,
+            "default_value" : table.rows[i].cells[10].children[0].value,
+            "placeHolder" : table.rows[i].cells[11].children[0].value
         }  
 
         if(id != -1){

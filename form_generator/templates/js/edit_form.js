@@ -67,12 +67,13 @@ function field(fields, index){
     var type = row.insertCell(3);
     var required = row.insertCell(4);
     var visible = row.insertCell(5);
-    var description = row.insertCell(6);
-    var min_value = row.insertCell(7);
-    var max_value = row.insertCell(8);
-    var default_value = row.insertCell(9);
-    var placeholder = row.insertCell(10);
-    var deleted = row.insertCell(11);
+    var enable = row.insertCell(6);
+    var description = row.insertCell(7);
+    var min_value = row.insertCell(8);
+    var max_value = row.insertCell(9);
+    var default_value = row.insertCell(10);
+    var placeholder = row.insertCell(11);
+    var deleted = row.insertCell(12);
 
     id.innerHTML = fields[index].id; 
     name.innerHTML = '<input id="name" type="text" value="' + fields[index].name + '">';
@@ -80,6 +81,7 @@ function field(fields, index){
     type.innerHTML = '<label>' + fields[index].field_type + '</label>';
     required.innerHTML = checkbox_check_nl(fields[index].required, "required", fields[index].id);
     visible.innerHTML = checkbox_check_nl(fields[index].visible, "visible", fields[index].id);
+    enable.innerHTML = checkbox_check_nl(fields[index].enable, "enable", fields[index].id);
     description.innerHTML = '<input id="name" type="text" value="' + fields[index].description + '">';
     min_value.innerHTML = '<input id="name" type="text" value="' + fields[index].min_value + '">';
     max_value.innerHTML = '<input id="name" type="text" value="' + fields[index].max_value + '">';
@@ -98,24 +100,3 @@ function checkbox_check_nl(data, type, id){
         return '<input id="'+ type + '-' + id + '" type="checkbox">'
     }
 }
-
-
-
-
-// function make_selector_field(data, selected){
-//     select = '<select id="field" name="field">';
-//     for(i=0; i<data.length; i++){
-//         if(data[i].field_type == selected){
-//             select += '<option ' + '" value="' + data[i].id +  '" selected>' +
-//                 data[i].field_type +
-//                 '</option>';
-//         }
-//         else{
-//             select += '<option ' + '" value="' + data[i].id +  '">' +
-//                 data[i].field_type +
-//                 '</option>';
-//         }
-//     }
-//     select += '</select>';
-//     return select;
-// }

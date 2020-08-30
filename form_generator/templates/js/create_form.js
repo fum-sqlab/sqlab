@@ -29,17 +29,19 @@ function add_row(data) {
     var type = row.insertCell(2);
     var required = row.insertCell(3);
     var visible = row.insertCell(4);
-    var description = row.insertCell(5);
-    var min_value = row.insertCell(6);
-    var max_value = row.insertCell(7);
-    var default_value = row.insertCell(8);
-    var placeholder = row.insertCell(9);
+    var enable = row.insertCell(5);
+    var description = row.insertCell(6);
+    var min_value = row.insertCell(7);
+    var max_value = row.insertCell(8);
+    var default_value = row.insertCell(9);
+    var placeholder = row.insertCell(10);
 
     name.innerHTML = '<input id="name" type="text">';
     label.innerHTML = '<input id="label" type="text">';
     type.innerHTML = make_selector_field(data);
     required.innerHTML = '<input id="required" type="checkbox">';
     visible.innerHTML = '<input id="visible" type="checkbox" checked="checked">';
+    enable.innerHTML = '<input id="enable" type="checkbox" checked="checked">'
     description.innerHTML = '<input id="desc" type="text">';
     min_value.innerHTML = '<input id="minv" type="text">';
     max_value.innerHTML = '<input id="maxv" type="text">';
