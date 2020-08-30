@@ -11,9 +11,6 @@ from .helper import *
 from .exception import exceptions
 from .status import *
 
-import json
-from django.http import HttpResponse
-
 user =[ 
     {
         "id" : 1,
