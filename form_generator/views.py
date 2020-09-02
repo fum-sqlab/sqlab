@@ -57,22 +57,13 @@ class FormView(viewsets.ViewSet):
                     new_record.save()
 
                     if typeof == "checkbox" or typeof == "radio":
-                        group_name = new_record.data.get('name')
                         field_id = new_record.data.get('id')
                         for item in items:
-                            item["group_name"] = group_name
+                            item['field'] = field_id
                             choice = ChoiceSerializer(data=item)
 
                             if choice.is_valid():
                                 choice.save()
-                                choiceField = {}
-                                choiceField['choice'] = choice.data.get('id')
-                                choiceField['field'] = field_id
-                                ch_seri = ChoiceFieldSerializer(data=choiceField)
-                                if ch_seri.is_valid():
-                                    ch_seri.save()
-                                else:
-                                    return Response(ch_seri.errors, status=INVALID_DATA)
                             else:
                                 return Response(choice.errors, status=INVALID_DATA)
 
@@ -109,16 +100,15 @@ class FormView(viewsets.ViewSet):
         ffo = filter_for_deleting(type_object="formfield", form=pk)
         pfo = filter_for_deleting(type_object="pageform", form=pk)
         if has_choice(ffo):
-            _ids = choice_ids(ffo)
-        else:
-            _ids = []
+            ffo_seri = FormFieldSerializer(ffo, many=True)
+            for choice in ffo_seri.data:
+                filter_object(type_object="choice", field=choice["id"]).delete()
         if ffo is not None:
             ffo.delete()
         if pfo is not None:
             pfo.delete()
         form.delete()
-        for id in _ids:
-            get_object(type_object="choice", primary_key=id).delete()
+
         return Response(status=DELETED)
 
     @action(detail=True, methods=['PUT'])

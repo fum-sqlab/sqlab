@@ -18,11 +18,6 @@ class ChoiceSerializer(serializers.ModelSerializer):
         model = Chioce
         fields = '__all__'
 
-class ChoiceFieldSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChoiceField
-        fields = '__all__'
-
 class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field

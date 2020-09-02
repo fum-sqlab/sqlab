@@ -1,5 +1,5 @@
 from .models import *
-from .serializers import FormFieldSerializer, ChoiceFieldSerializer, FieldSerializer, ChoiceSerializer
+from .serializers import FormFieldSerializer, FieldSerializer, ChoiceSerializer
 from .exception import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
@@ -15,7 +15,6 @@ TYPES = {
     "pageform" : PageForm,
     "groupform" : GroupForm,
     "submission" : Submission,
-    "choicefield" : ChoiceField,
     "choice" : Chioce
 }
 
@@ -65,17 +64,6 @@ def checking_requirement(requied_field, answers):
                 requied_field.remove(rf)
     return requied_field
 
-def choice_ids(fields_obj):
-    fields_seri = FormFieldSerializer(fields_obj, many=True)
-    _ids =[]
-    for item in fields_seri.data:
-        _id = item['id']
-        objs = ChoiceFieldSerializer(filter_object(type_object="choicefield", field_id=_id), many=True)
-        for obj in objs.data:
-            choice_id = obj['choice']
-            _ids.append(choice_id)
-    return _ids
-
 def has_choice(fields_obj):
     fields_seri = FormFieldSerializer(fields_obj, many=True)
     _ids =[]
@@ -88,12 +76,10 @@ def has_choice(fields_obj):
     return False
 
 def get_items(_id):
-    obj = filter_for_deleting(type_object="choicefield", field_id=_id)
-    if obj is not None:
-        items = []
-        obj_seri = ChoiceFieldSerializer(obj, many=True)
+    objs = filter_for_deleting(type_object="choice", field=_id)
+    items = []
+    if objs is not None:
+        obj_seri = ChoiceSerializer(objs, many=True)
         for item in obj_seri.data:
-            id = item["choice"]
-            choice = ChoiceSerializer(get_object(type_object="choice", primary_key=id)).data["name"]
-            items.append({"name":choice})
+            items.append({"name":item["name"]})
     return items
