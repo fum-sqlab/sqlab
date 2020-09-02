@@ -38,31 +38,40 @@
             <h2>Fields</h2>
             <table id="myTable">
                 <tr>
+                    <th>Type</th>
                     <th>Name</th>
                     <th>Label</th>
-                    <th>Type</th>
                     <th>Required</th>
                     <th>Visible</th>
                     <th>Enable</th>
-                    <th>description</th>
-                    <th>min_value</th>
-                    <th>max_value</th>
+                    <th>Description</th>
+                    <th>Index</th>
                     <th>default_value</th>
-                    <th>PlaceHolder</th>
+                    <th></th>
+                    <th></th>
                 </tr>    
             </table>
             <br><br>
 
             <div class="row">
-                <button onclick="loadFieldContent()">Create row</button>
-                <button onclick="delete_row()">Delete row</button>
+                <select id="fields"></select>
+                <button onclick="get_type_value()">Add</button>
+                <button onclick="delete_row()">Remove</button>
             </div>
             <div class="row">
                 <input type="submit" value="Submit" onclick="send_data()">
             </div>
 
         </div>
+        <p id="x"></p>
+        <script>
+            window.onload = function () {
+                loadFieldContent();
+            }
+        </script>
         
         <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/create_form.js"></script>
+        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/field_type.js"></script>
+        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/create_dy_field_table.js"></script>
     </body>
 </html>

@@ -6,8 +6,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Chioce(models.Model):
-    name = models.CharField(max_length=50, default=None)
-    slug = models.SlugField(max_length=50)
+    group_name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        unique_together = ('group_name','name')
 
 class Field(models.Model):
     '''
@@ -128,16 +131,6 @@ class GroupForm(models.Model):
 
     class Meta:
         unique_together = ('group', 'form')
-
-class History(models.Model):
-    '''
-    Model for a history. each form can have many versions of history.
-    '''
-    form_data = models.ForeignKey('FormField', on_delete=models.SET_NULL, null=True)
-    answer = models.ForeignKey('Answer', on_delete=models.SET_NULL, null=True)
-    history_info = models.CharField(max_length=200, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
 
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

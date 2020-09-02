@@ -43,18 +43,45 @@ class FormView(viewsets.ViewSet):
         form = FormSerializer(data=form_data)
         if form.is_valid():
             form.save()
+
             for field in all_fields:
                 field['field'] = field.pop('field_id')
                 field['form'] = form.data.get('id')
+
+                typeof = field.pop('type')
+                if typeof == "checkbox" or typeof == "radio":
+                    items = field.pop("items")
+
                 new_record = FormFieldSerializer(data=field)
                 if new_record.is_valid():
                     new_record.save()
+
+                    if typeof == "checkbox" or typeof == "radio":
+                        group_name = new_record.data.get('name')
+                        field_id = new_record.data.get('id')
+                        for item in items:
+                            item["group_name"] = group_name
+                            choice = ChoiceSerializer(data=item)
+
+                            if choice.is_valid():
+                                choice.save()
+                                choiceField = {}
+                                choiceField['choice'] = choice.data.get('id')
+                                choiceField['field'] = field_id
+                                ch_seri = ChoiceFieldSerializer(data=choiceField)
+                                if ch_seri.is_valid():
+                                    ch_seri.save()
+                                else:
+                                    return Response(ch_seri.errors, status=INVALID_DATA)
+                            else:
+                                return Response(choice.errors, status=INVALID_DATA)
+
                 else:
                     return Response(new_record.errors, status=INVALID_DATA)
         else:
             return Response(form.errors, status=INVALID_DATA)
 
-        return Response("The New Form Created.", status=CREATED)
+        return Response("ok", status=CREATED)
     
     def partial_update(self, request, pk=None):
         form = get_object(type_object="form", primary_key=pk)
@@ -81,11 +108,17 @@ class FormView(viewsets.ViewSet):
         form = get_object(type_object="form", primary_key=pk)
         ffo = filter_for_deleting(type_object="formfield", form=pk)
         pfo = filter_for_deleting(type_object="pageform", form=pk)
+        if has_choice(ffo):
+            _ids = choice_ids(ffo)
+        else:
+            _ids = []
         if ffo is not None:
             ffo.delete()
         if pfo is not None:
             pfo.delete()
         form.delete()
+        for id in _ids:
+            get_object(type_object="choice", primary_key=id).delete()
         return Response(status=DELETED)
 
     @action(detail=True, methods=['PUT'])
@@ -118,6 +151,9 @@ class FormView(viewsets.ViewSet):
                 field_seri = FieldSerializer(get_object(type_object="field", primary_key=field_id))
                 field_type = field_seri.data.get('field_type')
                 field["field_type"] = field_type
+
+                if field_type == "checkbox" or field_type == "radio":
+                    field["items"] = get_items(field["id"])
 
             form_seri['fields'] = form_field_seri.data
         return Response(form_seri, status=SUCCEEDED_REQUEST)

@@ -15,6 +15,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
+        model = Chioce
+        fields = '__all__'
+
+class ChoiceFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChoiceField
         fields = '__all__'
 
 class FieldSerializer(serializers.ModelSerializer):

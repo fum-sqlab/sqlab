@@ -1,5 +1,5 @@
 from .models import *
-from .serializers import FormFieldSerializer
+from .serializers import FormFieldSerializer, ChoiceFieldSerializer, FieldSerializer, ChoiceSerializer
 from .exception import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
@@ -14,7 +14,9 @@ TYPES = {
     "formfield" : FormField,
     "pageform" : PageForm,
     "groupform" : GroupForm,
-    "submission" : Submission
+    "submission" : Submission,
+    "choicefield" : ChoiceField,
+    "choice" : Chioce
 }
 
 def get_object(type_object="", primary_key=None):
@@ -62,3 +64,36 @@ def checking_requirement(requied_field, answers):
             if answer["field"] == rf:
                 requied_field.remove(rf)
     return requied_field
+
+def choice_ids(fields_obj):
+    fields_seri = FormFieldSerializer(fields_obj, many=True)
+    _ids =[]
+    for item in fields_seri.data:
+        _id = item['id']
+        objs = ChoiceFieldSerializer(filter_object(type_object="choicefield", field_id=_id), many=True)
+        for obj in objs.data:
+            choice_id = obj['choice']
+            _ids.append(choice_id)
+    return _ids
+
+def has_choice(fields_obj):
+    fields_seri = FormFieldSerializer(fields_obj, many=True)
+    _ids =[]
+    for item in fields_seri.data:
+        _id = item['field']
+        obj = FieldSerializer(filter_object(type_object="field", id=_id), many=True)
+        if obj.data[0]['field_type'] == "checkbox" or obj.data[0]['field_type'] == "radio":
+            return True
+    
+    return False
+
+def get_items(_id):
+    obj = filter_for_deleting(type_object="choicefield", field_id=_id)
+    if obj is not None:
+        items = []
+        obj_seri = ChoiceFieldSerializer(obj, many=True)
+        for item in obj_seri.data:
+            id = item["choice"]
+            choice = ChoiceSerializer(get_object(type_object="choice", primary_key=id)).data["name"]
+            items.append({"name":choice})
+    return items
