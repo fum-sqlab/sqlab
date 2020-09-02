@@ -23,9 +23,7 @@ function createForm(_myObj) {
       case "checkbox":
         text += checkbox_field(myObj[i]);
         break;
-      case "button":
-        text += button_field(myObj[i]);
-        break;
+
       default:
         text += similar_field(myObj[i]);
         break;
@@ -44,20 +42,7 @@ function checkbox_field(data){
   
   return check;
 }
-function button_field(data){
-  button = '<input type="button" id="' + data.id +
-           '" value="' + data.default_value +
-           '" name="' + data.name + '"';
 
-  if( data.visible == false ){
-    button += 'style="display: none;"'
-  }
-  if( data.enable == false ){
-    button += "disabled";
-  }
-  button += '>';
-  return button;
-}
 function similar_field(data){
   label = "<label for=\"" + data.id + '"';
   text = "<input type=\"" + data.field_type + "\"" +
