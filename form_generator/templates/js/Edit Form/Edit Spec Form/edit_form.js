@@ -22,7 +22,9 @@ function form(data){
     document.getElementById("checkboxes").innerHTML = checkbox_check_l(data.enable , "enable") +
                                                       checkbox_check_l(data.visible, "visible");
 
-    for(i=0; i<data.fields.length; i++){
+    
+    var i=0;                                                
+    for(i; i<data.fields.length; i++){
         field(data.fields, i);
     }
     
@@ -31,7 +33,7 @@ function form(data){
 function field(fields, index){
 
     var table = document.getElementById("myTable");  
-    var row = table.insertRow(1);
+    var row = table.insertRow(index+1);
     var id = row.insertCell(0);
     var type = row.insertCell(1);
     var name = row.insertCell(2);
@@ -65,35 +67,35 @@ function field(fields, index){
     switch(fields[index].field_type){
         case "text":
         case "textarea":
-            value = text(min, max, defv);
+            value = _text(min, max, defv);
             min_value.innerHTML = value[0];
             max_value.innerHTML = value[1];
             default_value.innerHTML = value[2];
             break;
 
         case "number":
-            value = number(min, max, defv);
+            value = _number(min, max, defv);
             min_value.innerHTML = value[0];
             max_value.innerHTML = value[1];
             default_value.innerHTML = value[2];
             break;
         
         case "date":
-            value = date(min, max, defv);
+            value = _date(min, max, defv);
             min_value.innerHTML = value[0];
             max_value.innerHTML = value[1];
             default_value.innerHTML = value[2];
             break;
 
         case "time":
-            value = time(min, max, defv);
+            value = _time(min, max, defv);
             min_value.innerHTML = value[0];
             max_value.innerHTML = value[1];
             default_value.innerHTML = value[2];
             break;
 
         case "datetime":
-            value = datetime(min, max, defv);
+            value = _datetime(min, max, defv);
             min_value.innerHTML = value[0];
             max_value.innerHTML = value[1];
             default_value.innerHTML = value[2];
@@ -110,12 +112,12 @@ function field(fields, index){
         case "boolean":
             min_value.innerHTML = null;
             max_value.innerHTML = null;
-            default_value.innerHTML = bool(defv);
+            default_value.innerHTML = _boolean(defv);
             break;
         
         case "checkbox":
         case "radio":
-            value = checkbox_item(defv, fields[index].items);
+            value = _checkbox_item(defv, fields[index].items);
             min_value.innerHTML = value[1];
             max_value.innerHTML = null;
             default_value.innerHTML = value[0];
@@ -151,7 +153,7 @@ function checkbox_check_l(data, type){
     }
 }
 
-function text(min, max, defv){
+function _text(min, max, defv){
     return arr = [
         '<input id="min_value" type="number" value="' + min + '" placeholder="min charcter">',
         '<input id="max_value" type="number" value="' + max + '" placeholder="max charcter">',
@@ -159,7 +161,7 @@ function text(min, max, defv){
     ]
 }
 
-function number(min,  max, defv){
+function _number(min,  max, defv){
     return arr = [
         '<input id="min_value" type="number" value="' + min + '" placeholder="min number">',
         '<input id="max_value" type="number" value="' + max + '" placeholder="max number">',
@@ -167,7 +169,7 @@ function number(min,  max, defv){
     ]
 }
 
-function date(min,  max, defv){
+function _date(min,  max, defv){
     return arr = [
         'Start:<input id="min_value" type="date" value="' + min + '">',
         'End:<input id="max_value" type="date" value="' + max + '">',
@@ -175,7 +177,7 @@ function date(min,  max, defv){
     ]
 }
 
-function datetime(min,  max, defv){
+function _datetime(min,  max, defv){
     return arr = [
         'Start:<input id="min_value" type="datetime-local" value="' + min + '">',
         'End:<input id="max_value" type="datetime-local" value="' + max + '">',
@@ -183,7 +185,7 @@ function datetime(min,  max, defv){
     ]
 }
 
-function time(min,  max, defv){
+function _time(min,  max, defv){
     return arr = [
         'Start:<input id="min_value" type="time" value="' + min + '">',
         'End:<input id="max_value" type="time" value="' + max + '">',
@@ -191,25 +193,17 @@ function time(min,  max, defv){
     ]
 }
 
-function bool(defv){
+function _boolean(defv){
     if( defv == "true" ){
         return '<input type="checkbox" id="boolean" name="boolean" checked>';
-        // return '<input type="radio" id="yes" name="boolean" value="true" checked>' +
-        //        '<label for="yes">Yes</label>' +
-        //        '<input type="radio" id="no" name="boolean" value="false">' +
-        //        '<label for="no">No</label>';
     }
     else{
         return '<input type="checkbox" id="boolean" name="boolean">';
-        // return '<input type="radio" id="yes" name="boolean" value="true">' +
-        //        '<label for="yes">Yes</label>' +
-        //        '<input type="radio" id="no" name="boolean" value="false" checked>' +
-        //        '<label for="no">No</label>';
     }
     
 }
 
-function checkbox_item(defv, items){
+function _checkbox_item(defv, items){
     var str_items ='';
     var ids = '';
     for(i=0; i<items.length; i++){

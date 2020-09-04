@@ -18,7 +18,7 @@ function send_data(){
         "description": form_desc,
         "fields": fields
     }
-    console.log(JSON.stringify(form))
+    // console.log(JSON.stringify(form))
     var xhttp = new XMLHttpRequest();
     var data = JSON.stringify(form);
     xhttp.open("POST", "http://127.0.0.1:8000/form/", true);
@@ -35,28 +35,29 @@ function get_field_data(){
     var table = document.getElementById("myTable");
     var rows_number = document.getElementsByTagName("tr").length;
     var fields = []
-    for(i=1; i< rows_number ; i++){
+    var i = 1;
+    for(i; i< rows_number ; i++){
         var obj = {}
-        var type = table.rows[i].cells[0].children[0].textContent;
+        var type = table.rows[i].cells[1].children[0].textContent;
         obj = {
-            "field_id" : table.rows[i].cells[0].children[0].id,
+            "field_id" : table.rows[i].cells[1].children[0].id,
             "type" : type,
-            "name" : table.rows[i].cells[1].children[0].value,
-            "label" : table.rows[i].cells[2].children[0].value,
+            "name" : table.rows[i].cells[2].children[0].value,
+            "label" : table.rows[i].cells[3].children[0].value,
             "required" : get_value("required"),
             "visible" : get_value("visible"),
             "enable" : get_value("enable"),
-            "description" : table.rows[i].cells[6].children[0].value,
-            "placeHolder" : table.rows[i].cells[7].children[0].value,
-            "default_value" : (type == "boolean") ? get_value("boolean").toString() : table.rows[i].cells[8].children[0].value,       
+            "description" : table.rows[i].cells[7].children[0].value,
+            "placeHolder" : table.rows[i].cells[8].children[0].value,
+            "default_value" : (type == "boolean") ? get_value("boolean").toString() : table.rows[i].cells[9].children[0].value,       
         }
 
-        if(table.rows[i].cells[10].childElementCount != 0){
-            obj["max_value"] = table.rows[i].cells[10].children[0].value; 
+        if(table.rows[i].cells[11].childElementCount != 0){
+            obj["max_value"] = table.rows[i].cells[11].children[0].value; 
         }
-        if(table.rows[i].cells[9].childElementCount != 0){
+        if(table.rows[i].cells[10].childElementCount != 0){
             if(type == "checkbox" || type == "radio"){
-                var value = table.rows[i].cells[9].children[0].value;
+                var value = table.rows[i].cells[10].children[0].value;
                 var sep = value.split(',');
                 items = [];
                 for(i=0; i<sep.length; i++){
@@ -66,7 +67,7 @@ function get_field_data(){
                 obj["items"] = items;
             }
             else {
-                obj["min_value"] = table.rows[i].cells[9].children[0].value;
+                obj["min_value"] = table.rows[i].cells[10].children[0].value;
             }
         }
         fields.push(obj);

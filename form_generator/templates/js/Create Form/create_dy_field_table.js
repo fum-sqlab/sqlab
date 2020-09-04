@@ -3,6 +3,7 @@ var id;
 function get_type_value(slc){
     var index = document.getElementById("fields").selectedIndex;
     var type = document.getElementsByTagName("option")[index].value;
+    var tId = document.getElementsByTagName("option")[index].id;
     if (slc == "create") {
         count++;
         id = document.getElementsByTagName("option")[index].id;
@@ -12,28 +13,32 @@ function get_type_value(slc){
         count = table.rows.length;
         id = -1;
     }
-    create_field_table(type, id);
+    create_field_table(type, id, tId);
 }
 
-function create_field_table(fType, fId){
+function create_field_table(fType, fId, tId){
     var table = document.getElementById("myTable");
     var row = table.insertRow(count);
 
-    var type = row.insertCell(0);
-    var name = row.insertCell(1);
-    var label = row.insertCell(2);
-    var required = row.insertCell(3);
-    var visible = row.insertCell(4);
-    var enable = row.insertCell(5);
-    var description = row.insertCell(6);
-    var placeholder = row.insertCell(7);
-    var default_value = row.insertCell(8);
-    var min_value = row.insertCell(9);
-    var max_value = row.insertCell(10);
+    var id = row.insertCell(0);
+    var type = row.insertCell(1);
+    var name = row.insertCell(2);
+    var label = row.insertCell(3);
+    var required = row.insertCell(4);
+    var visible = row.insertCell(5);
+    var enable = row.insertCell(6);
+    var description = row.insertCell(7);
+    var placeholder = row.insertCell(8);
+    var default_value = row.insertCell(9);
+    var min_value = row.insertCell(10);
+    var max_value = row.insertCell(11);
 
+    id.innerHTML = fId;
+    id.style.display = "none";
+    
     name.innerHTML = '<input id="name" type="text" placeholder="Name">';
     label.innerHTML = '<input id="label" type="text" placeholder="Lable">';
-    type.innerHTML = '<label id="'+ fId +'">' + fType + '</lable>';
+    type.innerHTML = '<label id="'+ tId +'">' + fType + '</lable>';
     required.innerHTML = '<input id="required" type="checkbox">';
     visible.innerHTML = '<input id="visible" type="checkbox" checked="checked">';
     enable.innerHTML = '<input id="enable" type="checkbox" checked="checked">';

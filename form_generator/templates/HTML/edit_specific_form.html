@@ -55,9 +55,8 @@
                 <br><br>
                 <div class="row">
                     <select id="fields"></select>
-                    <!-- <input type="button" value="+" onclick="localFieldContent()"> -->
-                    <input type="button" value="+" onclick="get_type_value('edit')">  <!-- create_dy_field_table.js -->
-                    <input type="button" value="-" onclick="delete_new_row()"> <!-- delete_new_field.js -->
+                    <input type="button" value="+" onclick="get_type_value('edit')">  <!-- create_dy_field_table.js DONE -->
+                    <input type="button" value="-" onclick="delete_new_row()"> <!-- delete_new_field.js  DONE -->
                 </div>
                 <br><br>
         
@@ -70,8 +69,8 @@
             window.onload = function () {
                 var url = document.location.href,
                     params = url.split('?')[1].split('=')[1];
-                loadFormContent(parseInt(params)); //edit_form.js
-                loadFieldContent(); //field_type.js
+                loadFormContent(parseInt(params)); //edit_form.js  DONE
+                loadFieldContent(); //field_type.js  DONE
             }
     
             function helper(x){

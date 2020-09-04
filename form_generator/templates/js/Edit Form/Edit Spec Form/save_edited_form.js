@@ -1,7 +1,6 @@
 function localUpdateForm(){
     var form_id = document.getElementById("id").textContent;
     var form = get_form_content_values();
-    console.log(JSON.stringify(form)) //-------------------------------------------
     var xhttp = new XMLHttpRequest();
     var url = "http://127.0.0.1:8000/form/" + form_id + "/";
     var data = JSON.stringify(form)
@@ -34,11 +33,12 @@ function get_form_content_values(){
 function get_field_row_table_cotent(){
     var table = document.getElementById("myTable");
     var fields = []
-    
-    for(i=1; i<table.rows.length; i++){
+    var lng = table.rows.length;
+    var i = 1;
+    for(i; i<lng ;i++){
         var obj = {}
         var id = parseInt(table.rows[i].cells[0].textContent);
-        var type = table.rows[i].cells[1].children[0].textContent,
+        var type = table.rows[i].cells[1].children[0].textContent;
         obj = {
             "name" : table.rows[i].cells[2].children[0].value,
             "label" : table.rows[i].cells[3].children[0].value,
@@ -81,7 +81,7 @@ function get_field_row_table_cotent(){
             fields.push(obj);
         }
         else{
-            add_specific_field(table,obj, i);    
+            add_specific_field(table, obj, i);    
         }
     }
     return fields;
@@ -95,9 +95,9 @@ function get_value(element_id){
     return false;
 }
 
-function add_specific_field(table,field_info, row_index){
+function add_specific_field(table, field_info, row_index){
     var form_id = document.getElementById("id").textContent;
-    var field_id = table.rows[row_index].cells[3].children[0].value;
+    var field_id = table.rows[row_index].cells[1].children[0].id;
     var data = JSON.stringify(field_info);
     var xmlhttp = new XMLHttpRequest();
     var url = "http://127.0.0.1:8000/form/set_field/" + field_id + "/" + form_id + "/";

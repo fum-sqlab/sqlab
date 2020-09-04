@@ -31,6 +31,10 @@ function createForm(_myObj) {
         text += boolean_field(myObj[i]);
         break;
       
+      case "textarea":
+        text += textarea_field(myObj[i]);
+        break;
+        
       default:
         text += similar_field(myObj[i]);
         break;
@@ -58,6 +62,7 @@ function checkbox_field(data){
              items[i].name + '<br>';
     } 
   }
+  check += '</fieldset>';
   return check;
 }
 function radio_field(data){
@@ -79,6 +84,7 @@ function radio_field(data){
              items[i].name + '<br>';
     } 
   }
+  check += '</fieldset>';
   return check;
 }
 function similar_field(data){
@@ -115,6 +121,13 @@ function boolean_field(data){
            '" name="' + data.name + 
            '" value="' + data.label + '">' + 
            data.label + '<br>';
+}
+function textarea_field(data){
+  var text = '<label for="'+ data.id + '">' + data.label + '</label>';
+  text += '<textarea id="' + data.id + '" name="' + data.name + '">' + 
+           data.default_value +
+           '</textarea>';
+  return text;
 }
 function sort(data_list){
   for(i=0; i<data_list.length; i++){
