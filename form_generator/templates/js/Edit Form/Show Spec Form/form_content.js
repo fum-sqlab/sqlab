@@ -27,6 +27,10 @@ function createForm(_myObj) {
         text += radio_field(myObj[i]);
         break;
 
+      case "boolean":
+        text += boolean_field(myObj[i]);
+        break;
+      
       default:
         text += similar_field(myObj[i]);
         break;
@@ -100,7 +104,17 @@ function similar_field(data){
 
   return label+text;
 }
-function datetime_field(data){
+function boolean_field(data){
+  if(data.default_value == true){
+    return '<input type="checkbox" id="' + data.id + 
+           '" name="' + data.name + 
+           '" value="' + data.label + '" checked>' + 
+           data.label + '<br>';
+  }
+  return '<input type="checkbox" id="' + data.id + 
+           '" name="' + data.name + 
+           '" value="' + data.label + '">' + 
+           data.label + '<br>';
 }
 function sort(data_list){
   for(i=0; i<data_list.length; i++){

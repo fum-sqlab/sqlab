@@ -1,7 +1,7 @@
 function localUpdateForm(){
     var form_id = document.getElementById("id").textContent;
     var form = get_form_content_values();
-    console.log(JSON.stringify(form))
+    console.log(JSON.stringify(form)) //-------------------------------------------
     var xhttp = new XMLHttpRequest();
     var url = "http://127.0.0.1:8000/form/" + form_id + "/";
     var data = JSON.stringify(form)
@@ -47,7 +47,7 @@ function get_field_row_table_cotent(){
             "enable" : table.rows[i].cells[6].children[0].checked,
             "description" : table.rows[i].cells[7].children[0].value,
             "placeHolder" : table.rows[i].cells[8].children[0].value,
-            "default_value" : table.rows[i].cells[9].children[0].value,
+            "default_value" : (type == "boolean") ? get_value("boolean").toString() : table.rows[i].cells[9].children[0].value,
         }  
         if(table.rows[i].cells[11].childElementCount != 0){
             obj["max_value"] = table.rows[i].cells[11].children[0].value; 
@@ -94,9 +94,7 @@ function get_value(element_id){
     }
     return false;
 }
-function get_items(ids, items_str){
 
-}
 function add_specific_field(table,field_info, row_index){
     var form_id = document.getElementById("id").textContent;
     var field_id = table.rows[row_index].cells[3].children[0].value;

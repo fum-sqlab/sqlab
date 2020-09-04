@@ -12,16 +12,6 @@ function loadFormContent(_id){
     xmlhttp.send();
 }
 
-// function localFieldContent(callback){
-//     var xmlhttp = new XMLHttpRequest();
-//     var url = "http://127.0.0.1:8000/field/";
-//     xmlhttp.open("GET", url, true);
-//     xmlhttp.onreadystatechange = function() {
-//         returned_data = xmlhttp.responseText;
-//     };
-//     xmlhttp.send("");
-// }
-
 function form(data){
     document.getElementById("ID").innerHTML = '<label id="id">' + data.id + '</label>';
     document.getElementById("Title").innerHTML = '<input type="text" id="title" name="title" value="'
@@ -120,7 +110,7 @@ function field(fields, index){
         case "boolean":
             min_value.innerHTML = null;
             max_value.innerHTML = null;
-            default_value.innerHTML = boolean();
+            default_value.innerHTML = bool(defv);
             break;
         
         case "checkbox":
@@ -201,18 +191,20 @@ function time(min,  max, defv){
     ]
 }
 
-function boolean(defv){
-    if( defv == true ){
-        return '<input type="radio" id="yes" name="boolean" value="true" checked>' +
-               '<label for="yes">Yes</label>' +
-               '<input type="radio" id="no" name="boolean" value="false">' +
-               '<label for="no">No</label>';
+function bool(defv){
+    if( defv == "true" ){
+        return '<input type="checkbox" id="boolean" name="boolean" checked>';
+        // return '<input type="radio" id="yes" name="boolean" value="true" checked>' +
+        //        '<label for="yes">Yes</label>' +
+        //        '<input type="radio" id="no" name="boolean" value="false">' +
+        //        '<label for="no">No</label>';
     }
     else{
-        return '<input type="radio" id="yes" name="boolean" value="true">' +
-               '<label for="yes">Yes</label>' +
-               '<input type="radio" id="no" name="boolean" value="false" checked>' +
-               '<label for="no">No</label>';
+        return '<input type="checkbox" id="boolean" name="boolean">';
+        // return '<input type="radio" id="yes" name="boolean" value="true">' +
+        //        '<label for="yes">Yes</label>' +
+        //        '<input type="radio" id="no" name="boolean" value="false" checked>' +
+        //        '<label for="no">No</label>';
     }
     
 }

@@ -1,6 +1,8 @@
 var count = 0;
 var id;
 function get_type_value(slc){
+    var index = document.getElementById("fields").selectedIndex;
+    var type = document.getElementsByTagName("option")[index].value;
     if (slc == "create") {
         count++;
         id = document.getElementsByTagName("option")[index].id;
@@ -10,8 +12,6 @@ function get_type_value(slc){
         count = table.rows.length;
         id = -1;
     }
-    var index = document.getElementById("fields").selectedIndex;
-    var type = document.getElementsByTagName("option")[index].value;
     create_field_table(type, id);
 }
 
@@ -150,10 +150,7 @@ function time(){
 }
 
 function boolean(){
-    return '<input type="radio" id="yes" name="boolean" value="true">' +
-           '<label for="yes">Yes</label>' +
-           '<input type="radio" id="no" name="boolean" value="false">' +
-           '<label for="no">No</label>';
+    return '<input type="checkbox" id="boolean" name="boolean">';
 }
 
 function checkbox_item(){

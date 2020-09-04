@@ -18,7 +18,7 @@ function send_data(){
         "description": form_desc,
         "fields": fields
     }
-    document.getElementById('x').innerHTML = JSON.stringify(form);
+    console.log(JSON.stringify(form))
     var xhttp = new XMLHttpRequest();
     var data = JSON.stringify(form);
     xhttp.open("POST", "http://127.0.0.1:8000/form/", true);
@@ -48,7 +48,7 @@ function get_field_data(){
             "enable" : get_value("enable"),
             "description" : table.rows[i].cells[6].children[0].value,
             "placeHolder" : table.rows[i].cells[7].children[0].value,
-            "default_value" : table.rows[i].cells[8].children[0].value,       
+            "default_value" : (type == "boolean") ? get_value("boolean").toString() : table.rows[i].cells[8].children[0].value,       
         }
 
         if(table.rows[i].cells[10].childElementCount != 0){
