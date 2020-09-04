@@ -25,5 +25,7 @@ urlpatterns = [
      path('page/<int:page_pk>/<int:form_pk>/<int:section_pk>/', PageView.as_view({'delete':'remove_form_from_page'}),
          name='remove_form'),
 
-     path('submit/', AnswerView.as_view({'post':'set_answer'}), name='set_answer')
+     path('submit/', AnswerView.as_view({'post':'set_answer'}), name='set_answer'),
+
+     path('choice/', ChoiceView.as_view({'post':'create'}), name='create_choice')
 ]

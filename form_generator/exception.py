@@ -35,10 +35,10 @@ class exceptions(APIException):
             self.status_code = status.HTTP_404_NOT_FOUND
             default_code = ""
             default_detail = "FormField_NOT_FOUND."
-        elif type == "choicefield":
+        elif type == "choice":
             self.status_code = status.HTTP_404_NOT_FOUND
             default_code = ""
-            default_detail = "ChoieField_NOT_FOUND."
+            default_detail = "Choice_NOT_FOUND."
 
         super().__init__(detail=default_detail, code=default_code)
 

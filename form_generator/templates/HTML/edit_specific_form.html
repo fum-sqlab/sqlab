@@ -2,7 +2,6 @@
 <html>
     <head>
         <link rel="stylesheet" href="C:/DjangoCode/sqlab/form_generator/templates/CSS/edit_specific_form_styles.css">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     </head>
     <body>
         <style>
@@ -39,23 +38,25 @@
                 <table id="myTable">
                         <tr>
                             <th class="ID">ID</th>
+                            <th>Type</th>
                             <th>Name</th>
                             <th>Label</th>
-                            <th>Type</th>
                             <th>Required</th>
                             <th>Visible</th>
                             <th>Enable</th>
                             <th>description</th>
-                            <th>min_value</th>
-                            <th>max_value</th>
-                            <th>default_value</th>
-                            <th>PlaceHolder</th>
+                            <th>Index</th>
+                            <th>value</th>
+                            <th></th>
+                            <th></th>
                             <th></th>
                         </tr>   
                 </table>
                 <br><br>
                 <div class="row">
-                    <input type="button" value="+" onclick="localFieldContent()">
+                    <select id="fields"></select>
+                    <!-- <input type="button" value="+" onclick="localFieldContent()"> -->
+                    <input type="button" value="+" onclick="get_type_value()">
                     <input type="button" value="-" onclick="delete_row()">
                 </div>
                 <br><br>
@@ -65,11 +66,13 @@
                 <input type="submit" value="Save" class="ss" onclick="localUpdateForm()">
             </div>
         </div> 
+        <p id="x"></p>
         <script>       
             window.onload = function () {
                 var url = document.location.href,
                     params = url.split('?')[1].split('=')[1];
-                loadFormContent(parseInt(params))
+                loadFormContent(parseInt(params));
+                loadFieldContent();
             }
     
             function helper(x){
@@ -79,6 +82,8 @@
         <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/edit_form.js"></script>
         <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/save_edited_form.js"></script>
         <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/delete_specific_field.js"></script>
-        <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/add_new_field.js"></script>  
+        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/field_type.js"></script>
+        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/create_dy_field_table.js"></script>
+        <!-- <script di="contentForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/add_new_field.js"></script>   -->
     </body>
 </html>

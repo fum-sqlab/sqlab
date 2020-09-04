@@ -18,6 +18,17 @@ user =[
     }
 ]
 
+class ChoiceView(viewsets.ViewSet):
+
+    def create(self, request):
+        choice_data = request.data
+        choice = ChoiceSerializer(data=choice_data)
+        if choice.is_valid():
+            choice.save()
+            return Response("ok", status=CREATED)
+        else:
+            return Response(choice.errors, status=INVALID_DATA)
+
 class FieldView(viewsets.ViewSet):
     def list(self, request):
         fields = Field.objects.all()
@@ -84,10 +95,27 @@ class FormView(viewsets.ViewSet):
             return Response(updated_form.errors)
         i = 0
         for field in fields:
-            field = get_object(type_object="formfield", primary_key=field["id"])
-            updated_field = FormFieldSerializer(field, data=request.data["fields"][i], partial=True)
+            field_obj = get_object(type_object="formfield", primary_key=field["id"])
+            updated_field = FormFieldSerializer(field_obj, data=request.data["fields"][i], partial=True)
             if updated_field.is_valid():
                 updated_field.save()
+                field_type = get_field_type(updated_field.data.get("field"))
+                if field_type == "radio" or field_type == "checkbox":
+                    items = field["items"]
+
+                    j = 0
+                    for item in items:
+                        item_obj = get_object("choice", primary_key=item["id"])
+                        if item["name"] is None:
+                            item_obj.delete()
+                        else:
+                            updated_choice = ChoiceSerializer(item_obj, data=items[j], partial=True)
+                            if updated_choice.is_valid():
+                                updated_choice.save()
+                            else: return Response(updated_choice.errors, status=INVALID_DATA)
+                        
+                        j += 1
+
             else: return Response(updated_field.errors, status=INVALID_DATA)
             i += 1
         return Response(status=SUCCEEDED_REQUEST)
@@ -102,7 +130,9 @@ class FormView(viewsets.ViewSet):
         if has_choice(ffo):
             ffo_seri = FormFieldSerializer(ffo, many=True)
             for choice in ffo_seri.data:
-                filter_object(type_object="choice", field=choice["id"]).delete()
+                result = filter_for_deleting(type_object="choice", field=choice["id"])
+                if result is not None:
+                    result.delete()
         if ffo is not None:
             ffo.delete()
         if pfo is not None:
@@ -125,6 +155,9 @@ class FormView(viewsets.ViewSet):
     @action(detail=True, methods=['DELETE'])
     def remove_field_from_form(self, request, ff_id):
         result = filter_for_deleting(type_object="formfield", id=ff_id)
+        choice_result = filter_for_deleting(type_object="choice", field=ff_id)
+        if choice_result is not None:
+            choice_result.delete()
         if result is not None:
             result.delete()
         return Response(status=DELETED)

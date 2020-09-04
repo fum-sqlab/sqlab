@@ -48,8 +48,7 @@ function get_field_data(){
             "enable" : get_value("enable"),
             "description" : table.rows[i].cells[6].children[0].value,
             "placeHolder" : table.rows[i].cells[7].children[0].value,
-            "default_value" : table.rows[i].cells[8].children[0].value,
-            
+            "default_value" : table.rows[i].cells[8].children[0].value,       
         }
 
         if(table.rows[i].cells[10].childElementCount != 0){
@@ -58,7 +57,7 @@ function get_field_data(){
         if(table.rows[i].cells[9].childElementCount != 0){
             if(type == "checkbox" || type == "radio"){
                 var value = table.rows[i].cells[9].children[0].value;
-                var sep = value.split('_');
+                var sep = value.split(',');
                 items = [];
                 for(i=0; i<sep.length; i++){
                     obj_item = { "name" : sep[i]}
@@ -72,7 +71,6 @@ function get_field_data(){
         }
         fields.push(obj);
     }
-    
     return fields;
 }
 

@@ -13,7 +13,8 @@ function localFieldContent(){
 
 function create_field_table(data) {
     var table = document.getElementById("myTable");
-    var row = table.insertRow(1);
+    var lng = table.rows.length;
+    var row = table.insertRow(lng);
     var id = row.insertCell(0);
     var name = row.insertCell(1);
     var label = row.insertCell(2);
@@ -26,7 +27,6 @@ function create_field_table(data) {
     var max_value = row.insertCell(9);
     var default_value = row.insertCell(10);
     var placeholder = row.insertCell(11);
-    // var add = row.insertCell(11)
 
     id.innerHTML = -1;
     name.innerHTML = '<input id="name" type="text">';
@@ -40,7 +40,6 @@ function create_field_table(data) {
     max_value.innerHTML = '<input id="maxv" type="text">';
     default_value.innerHTML = '<input id="defv" type="text">';
     placeholder.innerHTML = '<input id="palceholder" type="text">';
-    // add.innerHTML = '<button class="w3-button w3-red w3-padding-small" onclick="helper(this)">-</button>';
 
     id.style.display = "none";
 }
@@ -58,9 +57,10 @@ function make_selector_field(data){
 
 function delete_row() {
     var table = document.getElementById("myTable");
-    var field_id = table.rows[1].cells.item(0).innerHTML;
+    var lng = table.rows.length;
+    var field_id = table.rows[lng-1].cells.item(0).innerHTML;
     if(field_id == -1){
-        document.getElementById("myTable").deleteRow(1);
+        document.getElementById("myTable").deleteRow(lng-1);
     }   
     
 }

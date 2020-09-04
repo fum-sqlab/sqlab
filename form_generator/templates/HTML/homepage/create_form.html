@@ -46,7 +46,7 @@
                     <th>Enable</th>
                     <th>Description</th>
                     <th>Index</th>
-                    <th>default_value</th>
+                    <th>value</th>
                     <th></th>
                     <th></th>
                 </tr>    
@@ -55,23 +55,24 @@
 
             <div class="row">
                 <select id="fields"></select>
-                <button onclick="get_type_value()">Add</button>
-                <button onclick="delete_row()">Remove</button>
+                <button onclick="get_type_value()">Add</button> <!-- create_dy_field_table.js -->
+                <button onclick="delete_row()">Remove</button>  <!-- create_dy_field_table.js -->
+                
             </div>
             <div class="row">
-                <input type="submit" value="Submit" onclick="send_data()">
+                <input type="submit" value="Submit" onclick="send_data()"> <!-- create_form.js -->
             </div>
 
         </div>
         <p id="x"></p>
         <script>
             window.onload = function () {
-                loadFieldContent();
+                loadFieldContent(); // field_type.js
             }
         </script>
         
-        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/create_form.js"></script>
-        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/field_type.js"></script>
-        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/create_dy_field_table.js"></script>
+        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/Create Form/create_form.js"></script>
+        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/Create Form/field_type.js"></script>
+        <script id="createForm" type="text/javascript" src="C:/DjangoCode/sqlab/form_generator/templates/js/Create Form/create_dy_field_table.js"></script>
     </body>
 </html>

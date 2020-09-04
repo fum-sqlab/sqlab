@@ -1,4 +1,6 @@
+var count = 0;
 function get_type_value(){
+    count++;
     var index = document.getElementById("fields").selectedIndex;
     var type = document.getElementsByTagName("option")[index].value;
     var id = document.getElementsByTagName("option")[index].id;
@@ -7,7 +9,7 @@ function get_type_value(){
 
 function create_field_table(fType, fId){
     var table = document.getElementById("myTable");
-    var row = table.insertRow(1);
+    var row = table.insertRow(count);
 
     var type = row.insertCell(0);
     var name = row.insertCell(1);
@@ -89,6 +91,14 @@ function create_field_table(fType, fId){
             break;
     }
     placeholder.innerHTML = '<input id="placeholder" type="number" min="1">';
+}
+
+function delete_row() {
+    if(count != 0){
+        document.getElementById("myTable").deleteRow(count);
+        count--;
+    }
+    
 }
 
 function text(){
