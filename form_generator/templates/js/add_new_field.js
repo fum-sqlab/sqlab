@@ -54,14 +54,3 @@ function make_selector_field(data){
     select += '</select>';
     return select;
 }
-
-function delete_row() {
-    var table = document.getElementById("myTable");
-    var lng = table.rows.length;
-    var field_id = table.rows[lng-1].cells.item(0).innerHTML;
-    if(field_id == -1){
-        document.getElementById("myTable").deleteRow(lng-1);
-    }   
-    
-}
-    

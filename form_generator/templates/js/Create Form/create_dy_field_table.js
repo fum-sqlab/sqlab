@@ -1,9 +1,17 @@
 var count = 0;
-function get_type_value(){
-    count++;
+var id;
+function get_type_value(slc){
+    if (slc == "create") {
+        count++;
+        id = document.getElementsByTagName("option")[index].id;
+    }
+    else if(slc == 'edit'){
+        var table = document.getElementById("myTable");
+        count = table.rows.length;
+        id = -1;
+    }
     var index = document.getElementById("fields").selectedIndex;
     var type = document.getElementsByTagName("option")[index].value;
-    var id = document.getElementsByTagName("option")[index].id;
     create_field_table(type, id);
 }
 

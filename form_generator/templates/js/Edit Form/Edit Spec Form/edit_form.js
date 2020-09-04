@@ -12,15 +12,15 @@ function loadFormContent(_id){
     xmlhttp.send();
 }
 
-function localFieldContent(callback){
-    var xmlhttp = new XMLHttpRequest();
-    var url = "http://127.0.0.1:8000/field/";
-    xmlhttp.open("GET", url, true);
-    xmlhttp.onreadystatechange = function() {
-        returned_data = xmlhttp.responseText;
-    };
-    xmlhttp.send("");
-}
+// function localFieldContent(callback){
+//     var xmlhttp = new XMLHttpRequest();
+//     var url = "http://127.0.0.1:8000/field/";
+//     xmlhttp.open("GET", url, true);
+//     xmlhttp.onreadystatechange = function() {
+//         returned_data = xmlhttp.responseText;
+//     };
+//     xmlhttp.send("");
+// }
 
 function form(data){
     document.getElementById("ID").innerHTML = '<label id="id">' + data.id + '</label>';
