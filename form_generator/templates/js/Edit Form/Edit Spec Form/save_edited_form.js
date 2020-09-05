@@ -52,36 +52,55 @@ function get_field_row_table_cotent(){
         if(table.rows[i].cells[11].childElementCount != 0){
             obj["max_value"] = table.rows[i].cells[11].children[0].value; 
         }
-        if(table.rows[i].cells[10].childElementCount != 0){
-            if(type == "checkbox" || type == "radio"){
-                var value = table.rows[i].cells[10].children[0].value.split(',');
-                var ids = table.rows[i].cells[10].children[0].id.split(',');
-                var lngV = value.length;
-                var lngI = ids.length;
-                items = [];
-                for(i=0; i<lngI || i<lngV; i++){
-                    var val = (i >= lngV || value[0]=="") ? null : value[i];
-                    if(i >= lngI || ids[0]==""){
-                        add_choice(id, val)
+        if( id != -1 ){
+            // When Field Exist in datbase
+            if(table.rows[i].cells[10].childElementCount != 0){
+                if(type == "checkbox" || type == "radio"){
+                    var value = table.rows[i].cells[10].children[0].value.split(',');
+                    var ids = table.rows[i].cells[10].children[0].id.split(',');
+                    var lngV = value.length;
+                    var lngI = ids.length;
+                    items = [];
+                    if( value[0] != "" || ids[0] != ""){
+                        for(k=0; k<lngI || k<lngV; k++){
+                            var val = (k >= lngV || value[0]=="") ? null : value[k];
+                            if(k >= lngI || ids[0]==""){
+                                add_choice(id, val)
+                            }
+                            else{
+                                obj_item = { "id": ids[k], "name": val}
+                                items.push(obj_item);
+                            }
+                        }
                     }
-                    else{
-                        obj_item = { "id": ids[i], "name": val}
+                    obj["items"] = items;
+                }
+                else{
+                    obj["min_value"] = table.rows[i].cells[10].children[0].value; 
+                }
+            }
+            obj["id"] = id;
+            fields.push(obj);           
+        }
+        if( id == -1 ){
+            //When you want to create new field
+            if(table.rows[i].cells[10].childElementCount != 0){
+                if( type != "checkbox" && type != "radio" ){
+                    obj["min_value"] = table.rows[i].cells[10].children[0].value;
+                }
+                else{
+                    var value = table.rows[i].cells[10].children[0].value.split(',');
+                    var lngV = value.length;
+                    items = [];
+                    var j = 0;
+                    for(j; j<lngV; j++){
+                        obj_item = {"name": value[j]}
                         items.push(obj_item);
                     }
+                    obj["items"] = items;
                 }
-                obj["items"] = items;
             }
-            else {
-                obj["min_value"] = table.rows[i].cells[10].children[0].value;
-            }
-        }
-
-        if(id != -1){
-            obj["id"] = id;
-            fields.push(obj);
-        }
-        else{
-            add_specific_field(table, obj, i);    
+            add_specific_field(table, obj, i);
         }
     }
     return fields;
@@ -111,6 +130,7 @@ function add_choice(field_id, name){
         "field" : field_id,
         "name" : name
     }
+    console.log(obj)
     var data = JSON.stringify(obj);
     var xmlhttp = new XMLHttpRequest();
     var url = "http://127.0.0.1:8000/choice/";

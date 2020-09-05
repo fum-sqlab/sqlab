@@ -206,9 +206,9 @@ function _boolean(defv){
 function _checkbox_item(defv, items){
     var str_items ='';
     var ids = '';
-    for(i=0; i<items.length; i++){
-        str_items += items[i].name + ',';
-        ids += items[i].id + ',';
+    for(j=0; j<items.length; j++){
+        str_items += items[j].name + ',';
+        ids += items[j].id + ',';
     }
     str_items = str_items.substring(0, str_items.length-1)
     ids = ids.substring(0, ids.length-1)

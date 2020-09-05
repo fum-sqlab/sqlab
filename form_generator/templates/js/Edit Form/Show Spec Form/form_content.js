@@ -15,7 +15,7 @@ function createForm(_myObj) {
   text = '<form name="' + _myObj.title + '"><div class="container">';
   text += '<h2>' + _myObj.title + '</h2>';
   text += '<p>' + _myObj.description + '</p> <hr>';
-  myObj = sort(_myObj.fields)
+  myObj = sort(_myObj.fields);
   for(i = 0; i< myObj.length; i++){
     type = myObj[i].field_type;
     switch(type){
@@ -48,18 +48,18 @@ function checkbox_field(data){
   var default_val = data.default_value;
   check = '<fieldset>';
   check += '<legend>' + data.label + '</legend>';
-  for(i=0; i<items.length; i++){
-    if(default_val == items[i].name){
+  for(j=0; j<items.length; j++){
+    if(default_val == items[j].name){
       check += '<input type="checkbox" id="' + data.id + 
              '" name="' + data.name + 
-             '" value="' + items[i].name + '" checked>' + 
-             items[i].name + '<br>';
+             '" value="' + items[j].name + '" checked>' + 
+             items[j].name + '<br>';
     }
     else{
       check += '<input type="checkbox" id="' + data.id + 
              '" name="' + data.name + 
-             '" value="' + items[i].name + '">' + 
-             items[i].name + '<br>';
+             '" value="' + items[j].name + '">' + 
+             items[j].name + '<br>';
     } 
   }
   check += '</fieldset>';
@@ -70,18 +70,18 @@ function radio_field(data){
   var default_val = data.default_value;
   check = '<fieldset>';
   check += '<legend>' + data.label + '</legend>';
-  for(i=0; i<items.length; i++){
-    if(default_val == items[i].name){
+  for(k=0; k<items.length; k++){
+    if(default_val == items[k].name){
       check += '<input type="radio" id="' + data.id + 
                '" name="' + data.name + 
-               '" value="' + items[i].name + '" checked>' + 
-               items[i].name + '<br>';
+               '" value="' + items[k].name + '" checked>' + 
+               items[k].name + '<br>';
     }
     else{
       check += '<input type="radio" id="' + data.id + 
              '" name="' + data.name + 
-             '" value="' + items[i].name + '">' + 
-             items[i].name + '<br>';
+             '" value="' + items[k].name + '">' + 
+             items[k].name + '<br>';
     } 
   }
   check += '</fieldset>';
@@ -130,12 +130,12 @@ function textarea_field(data){
   return text;
 }
 function sort(data_list){
-  for(i=0; i<data_list.length; i++){
-    for(j=i+1; j<data_list.length; j++){
-      if(data_list[i].placeHolder > data_list[j].placeHolder){
-        k = data_list[i];
-        data_list[i] = data_list[j];
-        data_list[j] = k;
+  for(b=0; b<data_list.length; b++){
+    for(c=b+1; c<data_list.length; c++){
+      if(data_list[b].placeHolder > data_list[c].placeHolder){
+        dd = data_list[b];
+        data_list[b] = data_list[c];
+        data_list[c] = dd;
       }
     }
   }

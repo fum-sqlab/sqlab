@@ -149,6 +149,16 @@ class FormView(viewsets.ViewSet):
         form_field_seri = FormFieldSerializer(data=details)
         if form_field_seri.is_valid():
             form_field_seri.save()
+            if 'items' in details:
+                items = details['items']
+                _id = form_field_seri.data.get('id')
+                for item in items:
+                    item['field'] = _id
+                    cr_obj = ChoiceSerializer(data=item)
+                    if cr_obj.is_valid():
+                        cr_obj.save()
+                    else:
+                        return Response(cr_obj.errors, status=INVALID_DATA) 
             return Response(form_field_seri.data, status=SUCCEEDED_REQUEST)
         return Response(form_field_seri.errors, status=INVALID_DATA)
 

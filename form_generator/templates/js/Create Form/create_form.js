@@ -60,8 +60,8 @@ function get_field_data(){
                 var value = table.rows[i].cells[10].children[0].value;
                 var sep = value.split(',');
                 items = [];
-                for(i=0; i<sep.length; i++){
-                    obj_item = { "name" : sep[i]}
+                for(j=0; j<sep.length; j++){
+                    obj_item = { "name" : sep[j]}
                     items.push(obj_item);
                 }
                 obj["items"] = items;
