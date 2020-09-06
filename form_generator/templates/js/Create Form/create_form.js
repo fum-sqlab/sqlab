@@ -18,7 +18,7 @@ function send_data(){
         "description": form_desc,
         "fields": fields
     }
-    // console.log(JSON.stringify(form))
+    console.log(JSON.stringify(form))
     var xhttp = new XMLHttpRequest();
     var data = JSON.stringify(form);
     xhttp.open("POST", "http://127.0.0.1:8000/form/", true);
@@ -60,9 +60,12 @@ function get_field_data(){
                 var value = table.rows[i].cells[10].children[0].value;
                 var sep = value.split(',');
                 items = [];
-                for(j=0; j<sep.length; j++){
-                    obj_item = { "name" : sep[j]}
-                    items.push(obj_item);
+
+                if (value[0] != null){
+                    for(j=0; j<sep.length; j++){
+                        obj_item = { "name" : sep[j]}
+                        items.push(obj_item);
+                    }
                 }
                 obj["items"] = items;
             }

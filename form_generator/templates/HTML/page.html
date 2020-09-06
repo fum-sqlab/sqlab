@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title>Page</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="C:/DjangoCode/sqlab/form_generator/templates/CSS/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="C:/DjangoCode/sqlab/form_generator/templates/CSS/page_styles.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <style>
+    .box1 img,.box1:after,.box1:before{width:100%;transition:all .3s ease 0s}
+    .box1 .icon,.box2,.box3,.box4,.box5 .icon li a{text-align:center}
+    .box10:after,.box10:before,.box1:after,.box1:before,.box2 .inner-content:after,.box3:after,.box3:before,.box4:before,.box5:after,.box5:before,.box6:after,.box7:after,.box7:before{content:""}
+    .box1,.box11,.box12,.box13,.box14,.box16,.box17,.box18,.box2,.box20,.box21,.box3,.box4,.box5,.box5 .icon li a,.box6,.box7,.box8{overflow:hidden}
+    .box1 .title,.box10 .title,.box4 .title,.box7 .title{letter-spacing:1px}
+    .box3 .post,.box4 .post,.box5 .post,.box7 .post{font-style:italic}
+    body{background-color:#f1f1f2}
+    .mt-30{margin-top:30px}
+    .mt-40{margin-top:40px}
+    .mb-30{margin-bottom:30px}
+    .box1 .icon,.box1 .title{margin:0;position:absolute}
+    .box1{box-shadow:0 0 3px rgba(0,0,0,.3);position:relative}
+    .box1:after,.box1:before{height:50%;background:rgba(0,0,0,.5);position:absolute;top:0;left:0;z-index:1;transform-origin:100% 0;transform:rotateZ(90deg)}
+    .box1:after{top:auto;bottom:0;transform-origin:0 100%}
+    .box1:hover:after,.box1:hover:before{transform:rotateZ(0)}
+    .box1 img{height:auto;transform:scale(1) rotate(0)}
+    .box1:hover img{filter:sepia(80%);transform:scale(1.3) rotate(10deg)}
+    .box1 .title{font-size:19px;font-weight:600;color:#fff;text-transform:uppercase;text-shadow:0 0 1px #004cbf;bottom:10px;left:10px;opacity:0;z-index:2;transform:scale(0);transition:all .5s ease .2s}
+    .box1:hover .title{opacity:1;transform:scale(1)}
+    .box1 .icon{padding:7px 5px;list-style:none;background:#004cbf;border-radius:0 0 0 10px;top:-100%;right:0;z-index:2;transition:all .3s ease .2s}
+    .box1:hover .icon{top:0}
+    .box1 .icon li{display:block;margin:10px 0}
+    .box1 .icon li a{display:block;width:35px;height:35px;line-height:35px;border-radius:10px;font-size:18px;color:#fff;transition:all .3s ease 0s}
+    .box2 .icon li a,.box3 .icon a:hover,.box4 .icon li a:hover,.box5 .icon li a,.box6 .icon li a{border-radius:50%}
+    .box1 .icon li a:hover{color:#fff;box-shadow:0 0 10px #000 inset,0 0 0 3px #fff}
+    #wrapper {width: 1000px;} 
+    #wrapper .container {max-width: 100%; display: block;}
+    @media only screen and (max-width:990px){.box1{margin-bottom:30px}}
+  </style>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <h4 class="m-0 text-center text-white">Simple Page</h4>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+
+      <!-- Blog Entries Column -->
+      <div class="col-md-12">
+        <h3 class="my-4"> Just for showing forms </h3>
+        
+        <!-- Blog Post -->
+        <div class="card mb-5 border-radius" id="form1">
+            <div class="box1" >
+              <img class="card-img-top" src="C:\Users\Sara\Desktop\Add.png" alt="Card image cap">
+              <h3 class="title">Section 1</h3>
+              <ul class="icon">
+                  <li><button id="1" onclick="test(this)"><i class="fa fa-edit"></i></button></li>
+              </ul>
+            </div>
+        </div>
+
+        <!-- Blog Post -->
+        <div class="card mb-5" id="form2">
+          <div class="box1">
+            <img class="card-img-top" src="C:\Users\Sara\Desktop\Add.png" alt="Card image cap">
+            <h3 class="title">Section 2</h3>
+            <ul class="icon">
+              <li><button id="2" onclick="test(this)"><i class="fa fa-edit"></i></button></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Blog Post -->
+        <div class="card mb-5" id="form3">
+          <div class="box1">
+            <img class="card-img-top" src="C:\Users\Sara\Desktop\Add.png" alt="Card image cap">
+            <h3 class="title">Section 3</h3>
+            <ul class="icon">
+              <li><button id="3" onclick="test(this)"><i class="fa fa-edit"></i></button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark"></footer>
+
+  <script>
+    function test(x){
+      var _id = 'form'+x.id;
+      var select = '<div class="p-5">' + '<select multiple  class="form-control">' + 
+                    '<option>1</option>' +
+                    '<option>2</option>' + 
+                    '<option>3</option>' +
+                    '</select></div>';
+      select += '<div class="text-right"><div class = "btn-group">' +
+                '<div class="btn-group">' +
+                '<button type = "button" class = "btn btn-success">Set</button>'+
+                '</div><div class="btn-group">' +
+                '<button type = "button" class = "btn btn-danger">Cansle</button>'+
+                '</div></div></div>';
+      document.getElementById(_id).innerHTML = select;
+    }
+  </script>
+</body>
+
+</html>

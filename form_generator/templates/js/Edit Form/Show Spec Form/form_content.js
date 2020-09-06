@@ -123,11 +123,17 @@ function boolean_field(data){
            data.label + '<br>';
 }
 function textarea_field(data){
-  var text = '<label for="'+ data.id + '">' + data.label + '</label>';
-  text += '<textarea id="' + data.id + '" name="' + data.name + '">' + 
-           data.default_value +
+  var label = '<label for="'+ data.id + '"';
+  var text = '<textarea id="' + data.id + '" name="' + data.name + '"';
+  if( data.enable == false){
+    label += "disabled";
+    text += "disabled";
+  }
+
+  label += '>' + data.label + '</label>';
+  text +=  '>' + data.default_value +
            '</textarea>';
-  return text;
+  return label+text;
 }
 function sort(data_list){
   for(b=0; b<data_list.length; b++){
