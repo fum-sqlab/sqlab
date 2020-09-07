@@ -106,7 +106,7 @@ function field(fields, index){
             break;
         
         case "url":
-            default_value.innerHTML = '<input type="url" id="defv" placeholder="https://example.com">';
+            default_value.innerHTML = '<input type="url" id="defv" placeholder="https://example.com" value="'+ defv +'">';
             break;
 
         case "boolean":

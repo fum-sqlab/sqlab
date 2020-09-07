@@ -88,3 +88,11 @@ def get_field_type(_id):
     field = get_object(type_object="field", primary_key=_id)
     field_seri = FieldSerializer(field)
     return field_seri.data.get("field_type")
+
+def remove_repeated_id(_ids):
+    repeated_id = []
+    for _id in _ids:
+        if _id not in repeated_id:
+            repeated_id.append(_id)
+    
+    return repeated_id

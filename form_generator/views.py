@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from .helper import *
 from .exception import exceptions
 from .status import *
+from django.core import serializers
 
 user =[ 
     {
@@ -340,10 +341,20 @@ class PageView(viewsets.ViewSet):
     def show_page_details(self, request, pk=None):
         page = PageSerializer(get_object(type_object="page", primary_key=pk)).data
         forms_id = page.pop("forms")
-        print(page)
         forms = []
+        forms_id = remove_repeated_id(forms_id)
         for form_id in forms_id:
+            placeholders = []
             form = FormSerializer(get_object(type_object="form", primary_key=form_id)).data
+            objs_pageform = PageForm.objects.filter(page=pk, form=form_id)
+            for obj_pageform in objs_pageform:
+                seri_pageform = PageFormSerializer(obj_pageform).data
+                section_seri =SectionSerializer(get_object(type_object="section", primary_key=seri_pageform["section"])).data
+                section = {
+                    "id" : section_seri["id"],
+                    "placeholder" : section_seri["placeholder"]
+                }
+                placeholders.append(section)
             form_field = filter_object(type_object="formfield", form=form_id)
             form_field_data = FormFieldSerializer(form_field, many=True) #all form fields
             fields = []
@@ -352,8 +363,12 @@ class PageView(viewsets.ViewSet):
                 id = field.pop("field")
                 field_type = FieldSerializer(get_object(type_object="field", primary_key=id)).data["field_type"]
                 field["field_type"] = field_type
+                if field_type == "checkbox" or field_type == "radio":
+                    field["items"] = get_items(field["id"])
+
                 fields.append(field)
             form["fields"] = fields
+            form["section"] = placeholders
             forms.append(form)
         page["forms"] = forms
 
