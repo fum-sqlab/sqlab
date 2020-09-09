@@ -90,7 +90,7 @@ function form(data, _id, method_code){
     }
     else{
         text += '<div class="m-2 text-center text-md-center">' +
-                '<button id="sa_" class="btn btn-primary" onclick="answer(this.id)">Set Answwer</button>' +        
+                '<button id="sa_' + _id.placeholder + '" class="btn btn-primary" onclick="answer(this.id)">Set Answer</button>' +        
                 '</div><div class="status"></div></div></div>';
     }
     
@@ -160,6 +160,7 @@ function radioF(data){
         cb += ' <div class="form-check">';
         cb += '<input class="form-check-input" type="radio"'+
               'name="' + data.name + '"'+
+              'value="' + items[k].name + '"'+
               'id="'+ items[k].id +'">';
         cb += '<label class="form-check-label" for="' + items[k].id + '">' + items[k].name + '</label>';
         cb += '</div>';
