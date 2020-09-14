@@ -9,28 +9,40 @@ function answer(_id){
         switch(tn){
             case "INPUT":
                 var value = form[i].value;
+                var type = form[i].type;
                 break;
             case "FIELDSET":
                 var value = fieldset(form[i]);
                 i += form[i].getElementsByTagName("input").length;
                 break;
         }
-        answer = {
-            "form"  : form_id,
-            "field" : input_id,
-            "value" : value
+        if (value != "") {
+            answer = {
+                "form"  : form_id,
+                "field" : input_id,
+                "value" : value,
+                "type"  : type
+            }
+            answers.push(answer);
         }
         value = "";
-        answers.push(answer);
+        type = "";
+    }
+    set_ans = {
+        "id" : 1,
+        "answers" : answers
     }
     var xhttp = new XMLHttpRequest();
-    var data = JSON.stringify(answers);
+    var data = JSON.stringify(set_ans);
+    // console.log(data)
     xhttp.open("POST", "http://127.0.0.1:8000/submit/", true);
     xhttp.setRequestHeader("Content-Type", "application/json"); 
     xhttp.send(data);
     xhttp.onload = function () {
-        if (xhttp.status == 201){
-          window.location.reload();
+        if (xhttp.status == 200){
+            window.location.reload();
+        }else if(xhttp.status == 400){
+            console.log(xhttp.response)
         }
     };
 }

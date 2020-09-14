@@ -45,44 +45,32 @@ function createForm(_myObj) {
 }
 function checkbox_field(data){
   var items = data.items;
-  var default_val = data.default_value;
-  check = '<fieldset>';
+  var disable = disableF(data.enable);
+  var visible = visibleF(data.visible);
+  check = '<fieldset ' + visible + disable + '>';
   check += '<legend>' + data.label + '</legend>';
   for(j=0; j<items.length; j++){
-    if(default_val == items[j].name){
-      check += '<input type="checkbox" id="' + data.id + 
-             '" name="' + data.name + 
-             '" value="' + items[j].name + '" checked>' + 
-             items[j].name + '<br>';
-    }
-    else{
-      check += '<input type="checkbox" id="' + data.id + 
-             '" name="' + data.name + 
-             '" value="' + items[j].name + '">' + 
-             items[j].name + '<br>';
-    } 
+    var checked = checkedF(default_val, items[j].name);
+    check += '<input type="checkbox" id="' + data.id + 
+      '" name="' + data.name + 
+      '" value="' + items[j].name + '"'+ checked +'>' + 
+      items[j].name + '<br>';    
   }
   check += '</fieldset>';
   return check;
 }
 function radio_field(data){
   var items = data.items;
-  var default_val = data.default_value;
-  check = '<fieldset>';
+  var disable = disableF(data.enable);
+  var visible = visibleF(data.visible);
+  check = '<fieldset ' + visible + disable + '>';
   check += '<legend>' + data.label + '</legend>';
   for(k=0; k<items.length; k++){
-    if(default_val == items[k].name){
-      check += '<input type="radio" id="' + data.id + 
+    var checked = checkedF(data.default_value, items[k].name);
+    check += '<input type="radio" id="' + data.id + 
                '" name="' + data.name + 
-               '" value="' + items[k].name + '" checked>' + 
+               '" value="' + items[k].name + '"'+ checked +'>' + 
                items[k].name + '<br>';
-    }
-    else{
-      check += '<input type="radio" id="' + data.id + 
-             '" name="' + data.name + 
-             '" value="' + items[k].name + '">' + 
-             items[k].name + '<br>';
-    } 
   }
   check += '</fieldset>';
   return check;
@@ -111,15 +99,10 @@ function similar_field(data){
   return label+text;
 }
 function boolean_field(data){
-  if(data.default_value == true){
-    return '<input type="checkbox" id="' + data.id + 
-           '" name="' + data.name + 
-           '" value="' + data.label + '" checked>' + 
-           data.label + '<br>';
-  }
+  var checked = checkedF(data.default_value, "true");
   return '<input type="checkbox" id="' + data.id + 
            '" name="' + data.name + 
-           '" value="' + data.label + '">' + 
+           '" value="' + data.label + '"'+  checked +'>' + 
            data.label + '<br>';
 }
 function textarea_field(data){
@@ -135,6 +118,7 @@ function textarea_field(data){
            '</textarea>';
   return label+text;
 }
+/*------------------------------------------------------------------------*/ 
 function sort(data_list){
   for(b=0; b<data_list.length; b++){
     for(c=b+1; c<data_list.length; c++){
@@ -146,4 +130,23 @@ function sort(data_list){
     }
   }
   return data_list;
+}
+function disableF(data){
+  return (data == false) ? "disabled" : "";
+}
+function visibleF(data){
+  return (data == false) ? 'style="display: none;"' : '';
+}
+function checkedF(dfv, name){
+  dfv = dfv.split(',');
+  if(dfv.length>1){
+      for(var ln=0; ln<dfv.length; ln++){
+          if(dfv[ln] == name) return 'checked';
+      }
+      return ''
+  }
+  else{
+      return (dfv == name) ? 'checked' : '';
+  }
+  
 }

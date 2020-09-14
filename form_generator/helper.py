@@ -3,6 +3,7 @@ from .serializers import FormFieldSerializer, FieldSerializer, ChoiceSerializer
 from .exception import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
+from datetime import datetime
 
 
 TYPES = {
@@ -63,6 +64,46 @@ def checking_requirement(requied_field, answers):
             if answer["field"] == rf:
                 requied_field.remove(rf)
     return requied_field
+
+def checking_rang(answers):
+    not_in_range = []
+    
+    for ans in answers:
+        field_id = ans["field"]
+        _field = FormFieldSerializer(get_object(type_object="formfield", primary_key=field_id)).data
+        type = ans["type"]
+        if _field["max_value"] != '' and _field["min_value"] != '':
+            if type == "text" or type == "textarea":
+                max = int(_field["max_value"])
+                min = int(_field["min_value"])
+                leng = len(ans["value"])
+                if leng > max or leng < min:
+                    not_in_range.append(ans)
+            elif  type == "number":
+                max = int(_field["max_value"])
+                min = int(_field["min_value"])
+                if int(ans["value"]) > max or int(ans["value"]) < min:
+                    not_in_range.append(ans)
+            elif type == "datetime-local":
+                max = datetime.strptime(_field["max_value"].replace('T',' '), '%Y-%m-%d %H:%M')
+                min = datetime.strptime(_field["min_value"].replace('T',' '), '%Y-%m-%d %H:%M')
+                date = datetime.strptime(ans["value"].replace('T',' '), '%Y-%m-%d %H:%M')
+                if date > max or date < min:
+                    not_in_range.append(ans)
+            elif type == "date":
+                max = datetime.strptime(_field["max_value"], '%Y-%m-%d')
+                min = datetime.strptime(_field["min_value"], '%Y-%m-%d')
+                date = datetime.strptime(ans["value"], '%Y-%m-%d')
+                if date > max or date < min:
+                    not_in_range.append(ans)
+            elif type == "time":
+                max = datetime.strptime(_field["max_value"], '%H:%M')
+                min = datetime.strptime(_field["min_value"], '%H:%M')
+                date = datetime.strptime(ans["value"], '%H:%M')
+                if date > max or date < min:
+                    not_in_range.append(ans)
+
+    return not_in_range
 
 def has_choice(fields_obj):
     fields_seri = FormFieldSerializer(fields_obj, many=True)

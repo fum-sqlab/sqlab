@@ -385,6 +385,7 @@ class AnswerView(viewsets.ViewSet):
             "page" : page_id,
             "user" : user
         }
+        
         submission = SubmissionSerializer(data=page_data)
         if submission.is_valid():
             answers = data["answers"]
@@ -392,7 +393,8 @@ class AnswerView(viewsets.ViewSet):
                 form_id = answers[0]["form"]
                 required_list = list_required_field(form_id=form_id)
                 check_list = checking_requirement(requied_field=required_list, answers=answers)
-                if not check_list:
+                rang_list = checking_rang(data["answers"])
+                if not check_list and not rang_list:
                     submission.save()
                     for answer in answers:
                         answer['submission'] = submission.data["id"]
@@ -403,13 +405,15 @@ class AnswerView(viewsets.ViewSet):
                             filter_object(type_object="submission", id=submission.data["id"]).delete()
                             return Response(ans.errors, status=INVALID_DATA)           
                 else:
-                    return Response({"message" : "you didn't answer required fileds",
-                                     "fields" : check_list}, status=INCOMPLETE_DATA)
+                    return Response({
+                                        "requiers" : check_list,
+                                        "range" : rang_list
+                                    }, status=INCOMPLETE_DATA)
         else:
             return Response(submission.errors, status=INVALID_DATA)
         
 
-        return Response()
+        return Response(status=SUCCEEDED_REQUEST)
         
 
 

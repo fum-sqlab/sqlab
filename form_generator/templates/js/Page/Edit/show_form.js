@@ -63,6 +63,9 @@ function form(data, _id, method_code){
             case "checkbox":
                 text += checkboxF(_field[i]);
                 break;
+            case "boolean":
+                text += booleanF(_field[i]);
+                break;
             case "radio":
                 text += radioF(_field[i]);
                 break;
@@ -129,7 +132,6 @@ function textF(data){
 }
 function checkboxF(data){
     var items = data.items;
-    var default_val = data.default_value;
     var disable = disableF(data.enable);
     var visible = visibleF(data.visible);
     var cb = '<fieldset class="form-group" id="' + data.id + '"' + visible + disable + '>';
@@ -137,19 +139,19 @@ function checkboxF(data){
     cb += '<legend  class="col-form-label col-sm-2 pt-0">' + data.label + '</legend>';
     cb += '<div class="col-sm-10">';
     for(var j = 0; j < items.length; j++){
+        var checked = checkedF(data.default_value, items[j].name);
         cb += ' <div class="form-check">';
         cb += '<input class="form-check-input" type="checkbox"'+
-              'value="' + items[j].name + '"'+
-              'id="'+ items[j].id +'">';
+            'value="' + items[j].name + '"'+
+            'id="'+ items[j].id +'"'+ checked +'>'; 
         cb += '<label class="form-check-label" for="' + items[j].id + '">' + items[j].name + '</label>';
         cb += '</div>';
     }
-    cb += '</fieldset>';
+    cb += '</div></div></fieldset>';
     return cb;
 }
 function radioF(data){
     var items = data.items;
-    var default_val = data.default_value;
     var disable = disableF(data.enable);
     var visible = visibleF(data.visible);
     var cb = '<fieldset class="form-group" id="' + data.id + '"' + visible + disable + '>';
@@ -157,15 +159,16 @@ function radioF(data){
     cb += '<legend  class="col-form-label col-sm-2 pt-0">' + data.label + '</legend>';
     cb += '<div class="col-sm-10">';
     for(var k = 0; k < items.length; k++){   
+        var checked = checkedF(data.default_value, items[k].name);
         cb += ' <div class="form-check">';
         cb += '<input class="form-check-input" type="radio"'+
               'name="' + data.name + '"'+
               'value="' + items[k].name + '"'+
-              'id="'+ items[k].id +'">';
+              'id="'+ items[k].id +'"'+ checked +'>';
         cb += '<label class="form-check-label" for="' + items[k].id + '">' + items[k].name + '</label>';
         cb += '</div>';
     }
-    cb += '</div></fieldset>';
+    cb += '</div></div></fieldset>';
     return cb;
 }
 function date_time(data){
@@ -182,6 +185,20 @@ function date_time(data){
                  visible + disable + '>';
     datetime += '</div></div>';
     return datetime;
+}
+function booleanF(data){
+    var checked = checkedF(data.default_value, "true");
+    var disable = disableF(data.enable);
+    var visible = visibleF(data.visible);
+    var b = '<fieldset class="form-group" id="' + data.id + '"' + visible + disable + '>';
+    b += '<div class="row">';
+    b += '<legend  class="col-form-label col-sm-2 pt-0">' + data.label + '</legend>';
+    b += '<div class="col-sm-10">';
+    b += '<div class="form-check">' +
+         '<input type="checkbox" class="form-check-input" id="'+ data.id +'"'+ checked +'>' +
+         '<label class="form-check-label" for="'+ data.id +'">'+ data.label +'</label>' +
+         '</div></div></div></fieldset>';
+    return b;
 }
 function similar_field(data){
   var disable = disableF(data.enable);
@@ -210,7 +227,20 @@ function disableF(data){
     return (data == false) ? "disabled" : "";
 }
 function visibleF(data){
-    return (data ==false) ? 'style="display: none;"' : '';
+    return (data == false) ? 'style="display: none;"' : '';
+}
+function checkedF(dfv, name){
+    dfv = dfv.split(',');
+    if(dfv.length>1){
+        for(var ln=0; ln<dfv.length; ln++){
+            if(dfv[ln] == name) return 'checked';
+        }
+        return ''
+    }
+    else{
+        return (dfv == name) ? 'checked' : '';
+    }
+    
 }
 /* ------------------------------------------------------------------------------------------------------------------------------- */
 
