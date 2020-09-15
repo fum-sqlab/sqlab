@@ -1,5 +1,4 @@
 function answering(_id){
-    // var section = _id.split('_')[1];
     var form = document.getElementsByTagName("form").item(0);
     var form_id = form.id;
     var answers = []
@@ -39,7 +38,7 @@ function answering(_id){
     xhttp.send(data);
     xhttp.onload = function () {
         if (xhttp.status == 200){
-            window.location.reload();
+            document.getElementById("forms").innerHTML = back_to_show_ans(form_id);
         }else if(xhttp.status == 400){
             console.log(xhttp.response)
         }

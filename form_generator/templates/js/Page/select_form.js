@@ -20,7 +20,7 @@ function show_all_forms(data){
     text += '</select></div>';
     text += '<div class="text-right"><div class = "btn-group">' +
             '<div class="btn-group">' +
-            '<button type ="button" class ="btn btn-success" onclick="shoow()">Show</button>'+ 
+            '<button type ="button" class ="btn btn-success" onclick="show()">Show</button>'+ 
             '</div><div class="btn-group">' +
             '<button type = "button" class = "btn btn-danger" onclick="cancel()">Cancel</button>'+
             '</div></div></div>';

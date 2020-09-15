@@ -83,7 +83,7 @@ function form(data, method_code){
     if( method_code == 1){
         text += '<div class="m-2 text-center text-md-center">' +
                 '<button id="'+ data.id +'" class="btn btn-success" onclick="answering(this.id)">Set Answer</button>' + 
-                '<button class="btn btn-danger" onclick="cancel()">cancle</button>' +          
+                '<button id="'+ data.id +'" class="btn btn-danger" onclick="back_to_show_ans(this.id)">cancle</button>' +          
                 '</div><div class="status"></div></div></div>';
     }
     // else if(method_code == 2){

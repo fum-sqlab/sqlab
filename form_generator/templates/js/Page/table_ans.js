@@ -1,4 +1,4 @@
-function shoow(){
+function show(){
     var selectID = document.getElementById("select").selectedIndex;
     var formID = document.getElementsByTagName("option")[selectID].id;
     var xmlhttp = new XMLHttpRequest();
@@ -11,6 +11,19 @@ function shoow(){
     var url = "http://127.0.0.1:8000/answer/" + formID + "/";
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+}
+
+function back_to_show_ans(formID){
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var objForm = JSON.parse(this.responseText);
+      document.getElementById("forms").innerHTML = create_table(objForm, formID);
+    }
+  };
+  var url = "http://127.0.0.1:8000/answer/" + formID + "/";
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
 }
 
 function create_table(data, id) {
@@ -47,7 +60,10 @@ function create_table(data, id) {
     body += '</tr>';
   }
 
-  body += '<tr><td colspan="'+ field_len +'"><button id="' + id + '" type ="button" class ="btn btn-success" onclick="set(this.id)">+</button></td></tr>';
+  body += '<tr><td colspan="'+ field_len +'">'+
+          '<button id="' + id + '" type ="button" class ="btn btn-success" onclick="set(this.id)">+</button>'+
+          '<button type ="button" class ="btn btn-danger" onclick="cancel()">Cancle</button>'+
+          '</td></tr>';
   
   body += '</tbody>';
   table += (head+body+'</table>');
