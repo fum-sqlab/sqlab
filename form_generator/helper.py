@@ -16,7 +16,8 @@ TYPES = {
     "pageform" : PageForm,
     "groupform" : GroupForm,
     "submission" : Submission,
-    "choice" : Chioce
+    "choice" : Chioce,
+    "answer" : Answer
 }
 
 def get_object(type_object="", primary_key=None):
@@ -137,3 +138,10 @@ def remove_repeated_id(_ids):
             repeated_id.append(_id)
     
     return repeated_id
+
+def get_submission_uniqe_id(data):
+    submission = []
+    for ans in data:
+        submission.append(ans["submission"])
+    submissions_id = list(dict.fromkeys(submission))
+    return submissions_id

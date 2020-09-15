@@ -1,6 +1,6 @@
-function answer(_id){
-    var section = _id.split('_')[1];
-    var form = document.getElementById("form"+section).getElementsByTagName("form").item(0);
+function answering(_id){
+    // var section = _id.split('_')[1];
+    var form = document.getElementsByTagName("form").item(0);
     var form_id = form.id;
     var answers = []
     for(var i = 0; i<form.length; i++){
@@ -34,7 +34,6 @@ function answer(_id){
     }
     var xhttp = new XMLHttpRequest();
     var data = JSON.stringify(set_ans);
-    // console.log(data)
     xhttp.open("POST", "http://127.0.0.1:8000/submit/", true);
     xhttp.setRequestHeader("Content-Type", "application/json"); 
     xhttp.send(data);

@@ -26,6 +26,7 @@ urlpatterns = [
          name='remove_form'),
 
      path('submit/', AnswerView.as_view({'post':'set_answer'}), name='set_answer'),
+     path('answer/<int:_form_id>/', AnswerView.as_view({'get':'all_answers'}), name='get_answer'),
 
      path('choice/', ChoiceView.as_view({'post':'create'}), name='create_choice')
 ]

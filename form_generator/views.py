@@ -12,12 +12,6 @@ from .exception import exceptions
 from .status import *
 from django.core import serializers
 
-user =[ 
-    {
-        "id" : 1,
-        "username" : "Sara"
-    }
-]
 
 class ChoiceView(viewsets.ViewSet):
 
@@ -383,9 +377,8 @@ class AnswerView(viewsets.ViewSet):
         page = get_object(type_object="page", primary_key=page_id)
         page_data = {
             "page" : page_id,
-            "user" : user
-        }
-        
+            "user" : ''
+        }  
         submission = SubmissionSerializer(data=page_data)
         if submission.is_valid():
             answers = data["answers"]
@@ -415,5 +408,43 @@ class AnswerView(viewsets.ViewSet):
 
         return Response(status=SUCCEEDED_REQUEST)
         
-
-
+    @action(detail=True, methods=['GET'])    
+    def all_answers(self, request, _form_id):
+        answers_obj = filter_for_deleting(type_object="answer", form=_form_id)
+        all_fields = FormFieldSerializer(filter_object(type_object="formfield", form=_form_id), many=True).data
+        fields = []
+        for f in all_fields:
+            fields.append(f["label"])
+        result = {
+            "form" : _form_id,
+            "fields" : fields
+        }
+        if answers_obj is not None:
+            answers = AnswerSerializer(answers_obj, many=True).data
+            submissions_id = get_submission_uniqe_id(answers)
+    
+            submissions = []
+            for subm in submissions_id:
+                print(subm)
+                _subm = {"id" : subm} 
+                fields_value = []
+                index = 0
+                while index < len(answers):
+                    if answers[index]["submission"] == subm:
+                        field_id = answers[index]["field"]
+                        name = FormFieldSerializer(get_object(type_object="formfield", primary_key=field_id)).data["label"]
+                        value = {
+                            "id" : field_id,
+                            "value" : answers[index]["value"],
+                            "name" : name
+                        }
+                        answers.pop(index)
+                        fields_value.append(value)
+                    else:
+                        index += 1
+                _subm["fields"] = (fields_value)
+                submissions.append(_subm)
+            result["submission"] = submissions
+        else:
+            result["submission"] = []
+        return Response(result)

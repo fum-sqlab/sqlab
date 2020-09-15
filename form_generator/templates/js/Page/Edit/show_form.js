@@ -1,44 +1,44 @@
 function set(_id){
-    var ID = _id.split('_')[1];
-    var selectID = document.getElementById("select"+ID).selectedIndex;
-    var formID = document.getElementsByTagName("option")[selectID].id;
+    // var ID = _id.split('_')[1];
+    // console.log(ID)
+    // var selectID = document.getElementById("select"+ID).selectedIndex;
+    // var formID = document.getElementsByTagName("option")[selectID].id;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var objForm = JSON.parse(this.responseText);
-        document.getElementById("form"+ID).innerHTML = form(objForm, ID, 1);
+        document.getElementById("forms").innerHTML = form(objForm, 1);
       }
     };
-    var url = "http://127.0.0.1:8000/form/" + formID + "/";
+    var url = "http://127.0.0.1:8000/form/" + _id + "/";
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
 
-function show(type){
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var objForm = JSON.parse(this.responseText);
-        seperator_form(objForm, type);
-      }
-    };
-    var url = "http://127.0.0.1:8000/page/1/";
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-}
+// function show(type){
+//     var xmlhttp = new XMLHttpRequest();
+//     xmlhttp.onreadystatechange = function() {
+//       if (this.readyState == 4 && this.status == 200) {
+//         var objForm = JSON.parse(this.responseText);
+//         seperator_form(objForm, type);
+//       }
+//     };
+//     var url = "http://127.0.0.1:8000/page/1/";
+//     xmlhttp.open("GET", url, true);
+//     xmlhttp.send();
+// }
+// function seperator_form(data, type){
+//     var code = ( type == "edit" ) ? 2 : 3; 
+//     forms = data.forms;
+//     for(var index = 0; index < forms.length; index++){
+//         var location = forms[index].section;
+//         for(var loc = 0; loc < location.length; loc++){
+//             document.getElementById("form"+location[loc].placeholder).innerHTML = form(forms[index], location[loc], code);
+//         }
+//     }
+// }
 
-function seperator_form(data, type){
-    var code = ( type == "edit" ) ? 2 : 3; 
-    forms = data.forms;
-    for(var index = 0; index < forms.length; index++){
-        var location = forms[index].section;
-        for(var loc = 0; loc < location.length; loc++){
-            document.getElementById("form"+location[loc].placeholder).innerHTML = form(forms[index], location[loc], code);
-        }
-    }
-}
-
-function form(data, _id, method_code){
+function form(data, method_code){
 
     var text = '<section class="align-items-center">';
     text += '<h2 class="h1-responsive font-weight-bold text-center my-4">'+ data.title +'</h2>';
@@ -82,24 +82,23 @@ function form(data, _id, method_code){
     text += '</form>';
     if( method_code == 1){
         text += '<div class="m-2 text-center text-md-center">' +
-                '<button id="ss_'+ _id +'" class="btn btn-success" onclick="save(this.id)">Save</button>' + 
-                '<button id="cc_'+ _id +'" class="btn btn-danger" onclick="cancel(this.id)">cancle</button>' +          
+                '<button id="'+ data.id +'" class="btn btn-success" onclick="answering(this.id)">Set Answer</button>' + 
+                '<button class="btn btn-danger" onclick="cancel()">cancle</button>' +          
                 '</div><div class="status"></div></div></div>';
     }
-    else if(method_code == 2){
-        text += '<div class="m-2 text-center text-md-center">' +
-                '<button id="r_'+ _id.placeholder + "_" + _id.id +'" class="btn btn-danger" onclick="remove(this.id)">Remove</button>' +        
-                '</div><div class="status"></div></div></div>';
-    }
-    else{
-        text += '<div class="m-2 text-center text-md-center">' +
-                '<button id="sa_' + _id.placeholder + '" class="btn btn-primary" onclick="answer(this.id)">Set Answer</button>' +        
-                '</div><div class="status"></div></div></div>';
-    }
+    // else if(method_code == 2){
+    //     text += '<div class="m-2 text-center text-md-center">' +
+    //             '<button id="r_'+ _id.placeholder + "_" + _id.id +'" class="btn btn-danger" onclick="remove(this.id)">Remove</button>' +        
+    //             '</div><div class="status"></div></div></div>';
+    // }
+    // else{
+    //     text += '<div class="m-2 text-center text-md-center">' +
+    //             '<button id="sa_' + _id.placeholder + '" class="btn btn-primary" onclick="answer(this.id)">Set Answer</button>' +        
+    //             '</div><div class="status"></div></div></div>';
+    // }
     
     return text;
 }
-
 function fileF(data){
     var disable = disableF(data.enable);
     var visible = visibleF(data.visible);
