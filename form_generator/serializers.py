@@ -38,12 +38,6 @@ class FormSerializer(serializers.ModelSerializer):
     def create(self, valide_data):
         return Form.objects.create(**valide_data)
 
-class GroupSerializer(serializers.ModelSerializer):
-    form = FormSerializer(many=True, read_only=True)
-    class Meta:
-        model = Group
-        fields = '__all__'
-
 class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section

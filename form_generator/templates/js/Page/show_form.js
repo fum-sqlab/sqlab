@@ -1,8 +1,4 @@
 function set(_id){
-    // var ID = _id.split('_')[1];
-    // console.log(ID)
-    // var selectID = document.getElementById("select"+ID).selectedIndex;
-    // var formID = document.getElementsByTagName("option")[selectID].id;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -15,29 +11,6 @@ function set(_id){
     xmlhttp.send();
 }
 
-// function show(type){
-//     var xmlhttp = new XMLHttpRequest();
-//     xmlhttp.onreadystatechange = function() {
-//       if (this.readyState == 4 && this.status == 200) {
-//         var objForm = JSON.parse(this.responseText);
-//         seperator_form(objForm, type);
-//       }
-//     };
-//     var url = "http://127.0.0.1:8000/page/1/";
-//     xmlhttp.open("GET", url, true);
-//     xmlhttp.send();
-// }
-// function seperator_form(data, type){
-//     var code = ( type == "edit" ) ? 2 : 3; 
-//     forms = data.forms;
-//     for(var index = 0; index < forms.length; index++){
-//         var location = forms[index].section;
-//         for(var loc = 0; loc < location.length; loc++){
-//             document.getElementById("form"+location[loc].placeholder).innerHTML = form(forms[index], location[loc], code);
-//         }
-//     }
-// }
-
 function form(data, method_code){
 
     var text = '<section class="align-items-center">';
@@ -45,7 +18,7 @@ function form(data, method_code){
     text += '<p class="text-center w-responsive mx-auto mb-5">'+ data.description +'</p><hr>';
     text += '<div class="row">';
     text += '<div class="col-md-12">';
-    text += '<form id="'+ data.id +'" class="p-2">';
+    text += '<form id="'+ data.id +'" class="p-2" enctype="multipart/form-data" method="post">';
 
     _field = sort(data.fields);
     for(var i = 0; i< _field.length; i++){
@@ -213,7 +186,7 @@ function similar_field(data){
 function sort(data_list){
     for(b=0; b<data_list.length; b++){
       for(c=b+1; c<data_list.length; c++){
-        if(data_list[b].placeHolder > data_list[c].placeHolder){
+        if(Number(data_list[b].placeHolder) > Number(data_list[c].placeHolder)){
           dd = data_list[b];
           data_list[b] = data_list[c];
           data_list[c] = dd;

@@ -50,7 +50,7 @@ function checkbox_field(data){
   check = '<fieldset ' + visible + disable + '>';
   check += '<legend>' + data.label + '</legend>';
   for(j=0; j<items.length; j++){
-    var checked = checkedF(default_val, items[j].name);
+    var checked = checkedF(data.default_value, items[j].name);
     check += '<input type="checkbox" id="' + data.id + 
       '" name="' + data.name + 
       '" value="' + items[j].name + '"'+ checked +'>' + 
@@ -122,13 +122,14 @@ function textarea_field(data){
 function sort(data_list){
   for(b=0; b<data_list.length; b++){
     for(c=b+1; c<data_list.length; c++){
-      if(data_list[b].placeHolder > data_list[c].placeHolder){
+      if(Number(data_list[b].placeHolder) > Number(data_list[c].placeHolder)){
         dd = data_list[b];
         data_list[b] = data_list[c];
         data_list[c] = dd;
       }
     }
   }
+  console.log(data_list)
   return data_list;
 }
 function disableF(data){

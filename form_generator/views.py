@@ -10,7 +10,6 @@ from rest_framework.response import Response
 from .helper import *
 from .exception import exceptions
 from .status import *
-from django.core import serializers
 
 
 class ChoiceView(viewsets.ViewSet):
@@ -20,7 +19,7 @@ class ChoiceView(viewsets.ViewSet):
         choice = ChoiceSerializer(data=choice_data)
         if choice.is_valid():
             choice.save()
-            return Response("ok", status=CREATED)
+            return Response("Done", status=CREATED)
         else:
             return Response(choice.errors, status=INVALID_DATA)
 
@@ -185,64 +184,6 @@ class FormView(viewsets.ViewSet):
 
             form_seri['fields'] = form_field_seri.data
         return Response(form_seri, status=SUCCEEDED_REQUEST)
-        
-class GroupView(viewsets.ViewSet):
-
-    def list(self, request):
-        '''
-            Get all groups
-        '''
-        groups = Group.objects.all()
-        groups_serializer = GroupSerializer(groups, many=True)
-        return Response(groups_serializer.data, status=status.HTTP_200_OK)
-
-    def create(self, request):
-        '''
-            Create a new group
-        '''
-        group_serializer = GroupSerializer(data=request.data)
-        if group_serializer.is_valid():
-            group_serializer.save()
-            return Response(group_serializer.data, status=CREATED)
-        return Response(group_serializer.errors, status=INVALID_DATA)
-
-    def destroy(self, request, pk):
-        '''
-            Delete a group
-        '''
-        result = filter_for_deleting(type_object="groupform", group=pk)
-        if result is not None:
-            result.delete()
-        get_object(type_object="group", primary_key=pk).delete()
-        return Response(status=DELETED)
-
-    def retrive(self, request, pk):
-        gp = get_object(type_object="group", primary_key=pk)
-        gp_serializer = GroupSerializer(gp)
-        return Response(gp_serializer.data, status=SUCCEEDED_REQUEST)
-
-    @action(detail=True, methods=['PUT'])
-    def add_form_to_group(self, request, gp_pk, form_pk):
-        '''
-            Set a form to a specific group
-        '''
-        form = get_object(type_object="form", primary_key=form_pk)
-        group = get_object(type_object="group", primary_key=gp_pk)
-        
-        group.form.add(*[form])
-        group.save()
-        return Response("ok", status=SUCCEEDED_REQUEST)  
-         
-    @action(detail=True, methods=['DELETE'])
-    def remove_form_from_group(self, request, gp_pk, form_pk):
-        '''
-            Remove a from from list of specific group
-        '''
-        result = filter_for_deleting(type_object="groupform", form=form_pk, group=gp_pk)
-        if result is not None:
-            result.delete()
-            return Response(status=DELETED)
-        return Response("No data", status=NOT_FOUND)
 
 class PageView(viewsets.ViewSet):
 
@@ -369,6 +310,7 @@ class PageView(viewsets.ViewSet):
         return Response(page, status=200)
 
 class AnswerView(viewsets.ViewSet):
+    # parser_classes = [FileUploadParser]
 
     @action(detail=True, methods=['POST'])
     def set_answer(self, request):
@@ -425,7 +367,6 @@ class AnswerView(viewsets.ViewSet):
     
             submissions = []
             for subm in submissions_id:
-                print(subm)
                 _subm = {"id" : subm} 
                 fields_value = []
                 index = 0

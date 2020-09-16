@@ -7,11 +7,17 @@ function answering(_id){
         tn = form[i].tagName;
         switch(tn){
             case "INPUT":
-                var value = form[i].value;
+                if(form[i].type == "file"){
+                    var value = fileName(form[i]);
+                }
+                else{
+                    var value = form[i].value;
+                }
                 var type = form[i].type;
                 break;
             case "FIELDSET":
                 var value = fieldset(form[i]);
+                var type = "fieldSet";
                 i += form[i].getElementsByTagName("input").length;
                 break;
         }
@@ -33,6 +39,7 @@ function answering(_id){
     }
     var xhttp = new XMLHttpRequest();
     var data = JSON.stringify(set_ans);
+    console.log(data)
     xhttp.open("POST", "http://127.0.0.1:8000/submit/", true);
     xhttp.setRequestHeader("Content-Type", "application/json"); 
     xhttp.send(data);
@@ -57,4 +64,8 @@ function fieldset(fieldset){
         else if( inputs[j].checked == true ) return inputs[j].value;
     }
     return cb.substring(0, cb.length-1);
+}
+
+function fileName(fileinput){
+    return fileinput.files[0].name;
 }
