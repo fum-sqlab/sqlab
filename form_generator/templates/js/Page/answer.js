@@ -7,6 +7,7 @@ function answering(_id){
         tn = form[i].tagName;
         switch(tn){
             case "INPUT":
+            case "TEXTAREA":
                 if(form[i].type == "file"){
                     var value = fileName(form[i]);
                 }
