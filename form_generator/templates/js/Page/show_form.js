@@ -18,7 +18,7 @@ function form(data, method_code){
     text += '<p class="text-center w-responsive mx-auto mb-5">'+ data.description +'</p><hr>';
     text += '<div class="row">';
     text += '<div class="col-md-12">';
-    text += '<form id="'+ data.id +'" class="p-2" enctype="multipart/form-data" method="post">';
+    text += '<form action="/mydocs/" id="'+ data.id +'" class="p-2" enctype="multipart/form-data" method="post">';
 
     _field = sort(data.fields);
     for(var i = 0; i< _field.length; i++){

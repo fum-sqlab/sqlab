@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from .helper import *
 from .exception import exceptions
 from .status import *
+from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser 
 
 
 class ChoiceView(viewsets.ViewSet):
@@ -310,7 +312,6 @@ class PageView(viewsets.ViewSet):
         return Response(page, status=200)
 
 class AnswerView(viewsets.ViewSet):
-    # parser_classes = [FileUploadParser]
 
     @action(detail=True, methods=['POST'])
     def set_answer(self, request):
@@ -332,6 +333,12 @@ class AnswerView(viewsets.ViewSet):
                 if not check_list and not rang_list:
                     submission.save()
                     for answer in answers:
+                        if answer["value"] == "":
+                            dfv = FormFieldSerializer(get_object(type_object="formfield", primary_key= answer["field"])).data["default_value"]
+                            if dfv == "":
+                                continue
+                            else:
+                                answer["value"] = dfv
                         answer['submission'] = submission.data["id"]
                         ans = AnswerSerializer(data=answer)
                         if ans.is_valid():
@@ -346,9 +353,8 @@ class AnswerView(viewsets.ViewSet):
                                     }, status=INCOMPLETE_DATA)
         else:
             return Response(submission.errors, status=INVALID_DATA)
-        
 
-        return Response(status=SUCCEEDED_REQUEST)
+        return Response({"sub": submission.data["id"]},status=SUCCEEDED_REQUEST)
         
     @action(detail=True, methods=['GET'])    
     def all_answers(self, request, _form_id):
@@ -389,3 +395,29 @@ class AnswerView(viewsets.ViewSet):
         else:
             result["submission"] = []
         return Response(result)
+
+class FileUploadView(APIView):
+    parser_class = (FileUploadParser,)
+
+    def post(self, request, field_id, form_id, sub_id):
+        value = dict(request.data)["file"][0]
+        answer = {
+            "value" : str(value),
+            "field" : field_id,
+            "form"  : form_id,
+            "submission" : sub_id
+        }
+        ans = AnswerSerializer(data=answer)
+        if ans.is_valid():
+            ans.save()
+
+            files = request.data
+            files["value"] = ans.data["id"]
+            file_serializer = FileSerializer(data=files)
+            if file_serializer.is_valid():
+                file_serializer.save()
+                return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(ans.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -94,34 +94,6 @@ class PageForm(models.Model):
     class Meta:
         unique_together = ('page', 'form', 'section')
 
-class Group(models.Model):
-    '''
-    Model for group of form
-    '''
-    gp_name = models.CharField(max_length=50)
-    description = models.CharField(max_length=100)
-    form = models.ManyToManyField('Form', through='GroupForm', related_name='formGroup')
-    permissions = models.CharField(max_length=100, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
-                                   null=True, blank=True, related_name='group_created_by')
-    updated_on = models.DateTimeField(auto_now_add=True)
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE,
-                                   null=True, blank=True, related_name='group_updated_by')
-
-    class Meta:
-        verbose_name = 'Fields\' Group'
-
-class GroupForm(models.Model):
-    '''
-    Model for connection between Group and Form.
-    '''
-    group = models.ForeignKey('Group', on_delete=models.CASCADE)
-    form = models.ForeignKey('Form', on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('group', 'form')
-
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     page = models.ForeignKey('Page', on_delete=models.SET_NULL, null=True)
@@ -132,3 +104,9 @@ class Answer(models.Model):
     form = models.ForeignKey('Form', on_delete=models.CASCADE)
     field = models.ForeignKey('FormField', on_delete=models.CASCADE)
     value = models.CharField(default=None, max_length=200)
+
+class File(models.Model):
+    file = models.FileField(blank=True, null=True)
+    value = models.ForeignKey('Answer', on_delete=models.CASCADE)
+    def __str__(self):
+        return self.file.name

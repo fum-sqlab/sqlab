@@ -100,17 +100,24 @@ function similar_field(data){
 }
 function boolean_field(data){
   var checked = checkedF(data.default_value, "true");
+  var visible = visibleF(data.visible);
+  var enable = disableF(data.enable);
   return '<input type="checkbox" id="' + data.id + 
            '" name="' + data.name + 
-           '" value="' + data.label + '"'+  checked +'>' + 
+           '" value="' + data.label + '"'+  checked + visible + enable + '>' + 
            data.label + '<br>';
 }
 function textarea_field(data){
+  console.log(data)
   var label = '<label for="'+ data.id + '"';
   var text = '<textarea id="' + data.id + '" name="' + data.name + '"';
   if( data.enable == false){
     label += "disabled";
     text += "disabled";
+  }
+  if( data.visible == false ){
+    label += 'style="display: none;"';
+    text += 'style="display: none;"';
   }
 
   label += '>' + data.label + '</label>';

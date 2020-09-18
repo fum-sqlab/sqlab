@@ -11,10 +11,8 @@ TYPES = {
     "field": Field,
     "page" : Page,
     "section" : Section,
-    "group": Group,
     "formfield" : FormField,
     "pageform" : PageForm,
-    "groupform" : GroupForm,
     "submission" : Submission,
     "choice" : Chioce,
     "answer" : Answer
