@@ -49,7 +49,7 @@ pyrsistent==0.16.0
 python-dateutil==2.8.1
 pytz==2019.1
 pywin32==227
-PyYAML==5.3.1
+PyYAML==5.4
 pyzmq==19.0.0
 scipy==1.4.1
 -e git://github.com/jonashagstedt/django-simple-signup.git@62ce3a4bf81d02ad122422c936901ed6275b658f#egg=simple_signup
