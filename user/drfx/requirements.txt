@@ -30,7 +30,7 @@ jupyterlab-pygments==0.1.1
 legacy==0.1.6
 login==0.0.6
 MarkupSafe==1.1.1
-mistune==0.8.4
+mistune==2.0.3
 nbclient==0.2.0
 -e git+https://github.com/jupyter/nbconvert.git@3bd3c7f9c208b79f03a09f999828dfd139630038#egg=nbconvert
 nbformat==5.0.6
